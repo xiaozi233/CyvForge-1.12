@@ -3,6 +3,7 @@ package net.cyvforge;
 import net.cyvforge.config.ColorTheme;
 import net.cyvforge.config.CyvClientColorHelper;
 import net.cyvforge.config.CyvClientConfig;
+import net.cyvforge.cyvforge.Tags;
 import net.cyvforge.discord.DiscordRPCEventManager;
 import net.cyvforge.discord.DiscordRPCHandler;
 import net.cyvforge.event.CommandInitializer;
@@ -25,23 +26,19 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.LogManager;
-import scala.swing.TextComponent;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 //Main class of the mod
-@Mod(modid = CyvForge.MODID, version = CyvForge.VERSION)
+@Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION)
 public class CyvForge {
-	public static final String MODID = "cyvforge";
-	public static final String VERSION = "1.0";
-
 	public static CyvClientConfig config = new CyvClientConfig();
 	public static DecimalFormat df = new DecimalFormat("#");
 	public static ColorTheme theme = ColorTheme.CYVISPIRIA;
 
-	@Mod.Instance(CyvForge.MODID)
+	@Mod.Instance(Tags.MOD_ID)
 	public static CyvForge instance;
 
 	@Mod.EventHandler

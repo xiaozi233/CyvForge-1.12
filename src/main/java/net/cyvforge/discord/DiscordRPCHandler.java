@@ -5,7 +5,7 @@ import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
 import net.arikia.dev.drpc.DiscordUser;
 import net.arikia.dev.drpc.callbacks.ReadyCallback;
-import net.cyvforge.CyvForge;
+import net.cyvforge.cyvforge.Tags;
 import org.apache.logging.log4j.LogManager;
 
 public class DiscordRPCHandler {
@@ -59,7 +59,7 @@ public class DiscordRPCHandler {
     public void updateStatus(String firstline, String smallImage, String ip) {
         try {
             DiscordRichPresence.Builder b = new DiscordRichPresence.Builder("");
-            b.setBigImage("icon", "CyvForge-1.12 " + CyvForge.VERSION);
+            b.setBigImage("icon", "CyvForge-1.12 " + Tags.VERSION);
             b.setDetails(firstline);
             b.setStartTimestamps(this.created);
             b.setSmallImage(smallImage, ip);
