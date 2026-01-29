@@ -118,7 +118,7 @@ public class CommandGiveCheckpointGenerator extends CyvCommand {
 
             boolean flag = player.addItemStackToInventory(itemStack);
             if (flag) {
-                player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 player.inventoryContainer.detectAndSendChanges();
             }
         } catch (Exception e) {

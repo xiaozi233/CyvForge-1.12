@@ -51,8 +51,10 @@ public class DiscordRPCHandler {
     }
 
     public void shutdown() {
-        running = false;
-        DiscordRPC.discordShutdown();
+        try {
+            running = false;
+            DiscordRPC.discordShutdown();
+        } catch (Throwable ignored) {}
     }
 
     //status updates

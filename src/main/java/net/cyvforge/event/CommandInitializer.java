@@ -30,7 +30,7 @@ public class CommandInitializer  {
 
         cyvCommands.addAll(Arrays.asList(new CyvCommand[]{ //config commands
                 new CommandSetlb(), new CommandClearlb(), new CommandClearpb(), new CommandSetmm(), new CommandClearmm(),
-                new CommandSetbox(), new CommandSetcond(), new CommandLb(), new CommandMm()
+                new CommandSetbox(), new CommandSetcond(), new CommandLb(), new CommandMm(), new CommandToggleInvFmm()
         }));
 
         cyvCommands.addAll(Arrays.asList(new CyvCommand[] { //mm commands

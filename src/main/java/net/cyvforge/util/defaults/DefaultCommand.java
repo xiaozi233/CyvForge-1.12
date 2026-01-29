@@ -7,6 +7,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,8 +77,9 @@ public class DefaultCommand extends CommandBase {
         }
     }
 
-    public List<String> getTabCompletions(ICommandSender sender, String[] args, BlockPos pos) {
-        List<String> allCommandNames = new ArrayList<String>();
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+        List<String> allCommandNames = new ArrayList<>();
 
         for (CyvCommand c : cyvCommands) {
             allCommandNames.add(c.name);

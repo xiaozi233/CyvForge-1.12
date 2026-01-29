@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 public class KeybindingStopMacro extends CyvKeybinding {
     public KeybindingStopMacro() {
-        super("Stop Macro", Keyboard.KEY_NONE);
+        super("key.stopmacro.desc", Keyboard.KEY_NONE);
     }
 
     @Override

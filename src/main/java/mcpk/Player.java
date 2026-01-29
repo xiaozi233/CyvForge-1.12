@@ -96,7 +96,7 @@ public class Player {
 			//inertia threshold
 			if (Math.abs(this.vz) < 0.003D) this.vz = 0D;
 			if (Math.abs(this.vx) < 0.003D) this.vx = 0D;
-			
+
 			//movement multipliers
 			float accel = 0;
 			double drag = (float) (0.91F) * slip;

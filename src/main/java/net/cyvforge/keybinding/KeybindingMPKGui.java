@@ -7,7 +7,7 @@ import org.lwjgl.input.Keyboard;
 
 public class KeybindingMPKGui extends CyvKeybinding {
     public KeybindingMPKGui() {
-        super("Open MPK GUI", Keyboard.KEY_P);
+        super("key.openmpkgui.desc", Keyboard.KEY_RSHIFT);
     }
 
     @Override

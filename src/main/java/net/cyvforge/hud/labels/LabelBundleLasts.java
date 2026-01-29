@@ -27,7 +27,7 @@ public class LabelBundleLasts extends LabelBundle {
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 FontRenderer font = mc.fontRenderer;
-                
+
                 DecimalFormat df = CyvForge.df;
                 String str = df.format(ParkourTickListener.last45);
 
@@ -36,16 +36,15 @@ public class LabelBundleLasts extends LabelBundle {
                         , pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 FontRenderer font = mc.fontRenderer;
 
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
+                StringBuilder str = new StringBuilder("0.");
+                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str.append("0");
 
                 drawString("Last 45: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(str, pos.getAbsoluteX() + 1 + font.getStringWidth("Last 45: ")
+                drawString(str.toString(), pos.getAbsoluteX() + 1 + font.getStringWidth("Last 45: ")
                         , pos.getAbsoluteY() + 1, color2);
             }
         });
@@ -65,23 +64,22 @@ public class LabelBundleLasts extends LabelBundle {
 
                 MovementInput input = mc.player.movementInput;
                 String str = (input.moveForward > 0 ? "W" : "")
-                        + (input.moveStrafe < 0 ? "A" : "")
+                        + (input.moveStrafe > 0 ? "A" : "")
                         + (input.moveForward < 0 ? "S" : "")
-                        + (input.moveStrafe > 0 ? "D" : "");
+                        + (input.moveStrafe < 0 ? "D" : "");
 
-                drawString("Last Input: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(str, pos.getAbsoluteX() + 1 + font.getStringWidth("Last Input: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString("Last Input: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(str, pos.getAbsoluteX() + 1 + font.getStringWidth("Last Input: "),
+                        pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 FontRenderer font = mc.fontRenderer;
 
-                drawString("Last Input: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString("WASD", pos.getAbsoluteX() + 1 + font.getStringWidth("Last Input: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString("Last Input: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString("WASD", pos.getAbsoluteX() + 1 + font.getStringWidth("Last Input: "),
+                        pos.getAbsoluteY() + 1, color2);
             }
         });
 
@@ -101,22 +99,21 @@ public class LabelBundleLasts extends LabelBundle {
                 DecimalFormat df = CyvForge.df;
                 String z = df.format(ParkourTickListener.lastTurning);
 
-                drawString("Last Turning: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(z, pos.getAbsoluteX() + 1 + font.getStringWidth("Last Turning: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString("Last Turning: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(z, pos.getAbsoluteX() + 1 + font.getStringWidth("Last Turning: "),
+                        pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 FontRenderer font = mc.fontRenderer;
 
-                String str = "0.";
-                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str += "0";
+                StringBuilder str = new StringBuilder("0.");
+                for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str.append("0");
 
-                drawString("Last Turning: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(str, pos.getAbsoluteX() + 1 + font.getStringWidth("Last Turning: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString("Last Turning: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(str.toString(), pos.getAbsoluteX() + 1 + font.getStringWidth("Last Turning: "),
+                        pos.getAbsoluteY() + 1, color2);
             }
         });
 
@@ -142,19 +139,18 @@ public class LabelBundleLasts extends LabelBundle {
                     str = "WDWA";
                 }
 
-                drawString("Last Sidestep: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString(str, pos.getAbsoluteX() + 1 + font.getStringWidth("Last Sidestep: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString("Last Sidestep: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString(str, pos.getAbsoluteX() + 1 + font.getStringWidth("Last Sidestep: "),
+                        pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                int d = CyvClientConfig.getInt("df",5);
                 long color1 = CyvClientColorHelper.color1.drawColor;
                 long color2 = CyvClientColorHelper.color2.drawColor;
                 FontRenderer font = mc.fontRenderer;
 
-                drawString("Last Sidestep: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
-                drawString("WAD", pos.getAbsoluteX() + 1 + font.getStringWidth("Last Sidestep: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                drawString("Last Sidestep: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
+                drawString("WAD", pos.getAbsoluteX() + 1 + font.getStringWidth("Last Sidestep: "),
+                        pos.getAbsoluteY() + 1, color2);
             }
         });
     }

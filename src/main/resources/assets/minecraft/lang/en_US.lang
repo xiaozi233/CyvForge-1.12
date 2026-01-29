@@ -1,0 +1,10 @@
+key.cyvforge.category=CyvForge Keys
+key.openhudpositions.desc=Open HUD Position GUI
+key.openmpkgui.desc=Open MPK GUI
+key.togglesprint.desc=Toggle Sprint
+key.runmacro.desc=Run Macro
+key.stopmacro.desc=Stop Macro
+key.setlb.desc=Set Landing Block
+key.setlbX.desc=Set Landing Block X
+key.setlbZ.desc=Set Landing Block Z
+key.setmm.desc=Set Momentum Block

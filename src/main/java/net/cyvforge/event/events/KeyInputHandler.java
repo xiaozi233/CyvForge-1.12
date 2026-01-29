@@ -18,6 +18,10 @@ public class KeyInputHandler {
         cyvKeybindings.add(new KeybindingTogglesprint());
         cyvKeybindings.add(new KeybindingRunMacro());
         cyvKeybindings.add(new KeybindingStopMacro());
+        cyvKeybindings.add(new KeybindingSetlb());
+        cyvKeybindings.add(new KeybindingSetlbX());
+        cyvKeybindings.add(new KeybindingSetlbZ());
+        cyvKeybindings.add(new KeybindingSetmm());
 
         for (CyvKeybinding k : cyvKeybindings) ClientRegistry.registerKeyBinding(k);
     }

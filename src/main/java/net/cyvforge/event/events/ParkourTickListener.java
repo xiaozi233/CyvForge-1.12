@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.storage.WorldInfo;
@@ -47,8 +48,10 @@ public class ParkourTickListener {
     public static double hvx = 0, hvz = 0; //hit velocities
 
     public static float jf = 0, jp = 0; //jump angles
-    public static float sf = 0, sp = 0; //second turn angles
     public static float pf = 0, pp = 0; //preturn angles
+
+    // turning angles
+    public static float[] turningAngles = new float[12];
 
     //inertia
     public static double stored_v = 0;
@@ -75,6 +78,7 @@ public class ParkourTickListener {
     private static int lastJumpTime = -1;
     private static int lastGroundMoveTime = -1;
     private static int lastMoveTime = -1;
+    private static int lastSideTime = -1;
     private static int lastSprintTime = -1;
     private static int lastSneakTime = -2;
 
@@ -82,6 +86,8 @@ public class ParkourTickListener {
     private static boolean locked = false;
     private static boolean hasActed = false;
     private static boolean hasCollided = false;
+    private static boolean isPotentialMark = false;
+    private static boolean isPotentialStrafejam = false;
 
     //end of tick
     @SubscribeEvent
@@ -103,8 +109,7 @@ public class ParkourTickListener {
         calculateLastTiming();
         doCheckpoints();
 
-        if (lastTick == null) {
-        } else {
+        if (lastTick != null) {
             if ((!lastTick.onGround || !mcPlayer.onGround) && !mcPlayer.capabilities.isFlying) airtime++;
 
             x = mcPlayer.posX;
@@ -161,9 +166,6 @@ public class ParkourTickListener {
                 }
             }
 
-        } else if (airtime == 2 && lastTick.vy > 0) {
-            sf = f;
-            sp = p;
         }
 
         //last 45
@@ -174,6 +176,11 @@ public class ParkourTickListener {
 
         //last turning
         if (f != lastTick.f) lastTurning = f - lastTick.f;
+
+        // update turning angles
+        if (airtime >= 1 && airtime <= 12) {
+            turningAngles[airtime - 1] = f - lastTick.f;
+        }
 
         //hit tick
         if (lastTick != null && mcPlayer.onGround && !lastTick.onGround && vy < 0) {
@@ -286,7 +293,7 @@ public class ParkourTickListener {
 
             if ((stored_v>=min && stored_v<=max) || (stored_v<=min && stored_v>=max)) {
 
-                if (Math.abs(stored_v)*0.91F*stored_slip < 0.003) {
+                if (Math.abs(stored_v)*0.91F*stored_slip < 0.005) {
                     CyvForge.sendChatMessage("Hit inertia at tick " + (airtime-1) + ", previous v = " + df.format(stored_v));
                 } else {
                     CyvForge.sendChatMessage("Missed inertia at tick " + (airtime-1) + ", previous v = " + df.format(stored_v));
@@ -331,14 +338,17 @@ public class ParkourTickListener {
         boolean showMS = /*ModManager.getMod(ModMPKMod.class).showMilliseconds;*/false;
         GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
 
-        if (gameSettings.keyBindForward.isKeyDown() || //ANYTHING IS PRESSED
-                gameSettings.keyBindBack.isKeyDown() ||
-                gameSettings.keyBindLeft.isKeyDown() ||
-                gameSettings.keyBindRight.isKeyDown()) {
+        boolean isForwardDown = gameSettings.keyBindForward.isKeyDown();
+        boolean isBackDown =gameSettings.keyBindBack.isKeyDown();
+        boolean isSideKeyDown = gameSettings.keyBindLeft.isKeyDown() || gameSettings.keyBindRight.isKeyDown();
+        boolean isAnyMoveKeyDown = isSideKeyDown || isForwardDown || isBackDown;
+
+        if (isAnyMoveKeyDown) {
+            if (isSideKeyDown) lastSideTime++;
+            else lastSideTime = -1;
             lastMoveTime++;
             lastGroundMoveTime++;
             hasActed = true;
-
             /*
             if (lastMoveTime == 0) {
                 earliestMoveTimestamp = 0;
@@ -354,8 +364,10 @@ public class ParkourTickListener {
             //already jumped, started moving
             if (lastJumpTime > -1 && lastMoveTime == 0 && airtime != 0 && !(vy == 0 && lastTick.onGround)
                     && (lastTiming.contains("Pessi") || !locked)) {
-                if ((lastJumpTime+1) == 1) lastTiming = "Max Pessi";
-                else lastTiming = "Pessi " + (lastJumpTime+1) + " ticks";
+                lastTiming = "Pessi";
+                if (isSideKeyDown && (isForwardDown || isBackDown)) lastTiming = "Strafe " + lastTiming;
+                if ((lastJumpTime+1) == 1) lastTiming = "Max " + lastTiming;
+                else lastTiming = lastTiming + ' ' + (lastJumpTime+1) + " ticks";
                 locked = true;
 
                 /*
@@ -371,6 +383,7 @@ public class ParkourTickListener {
         } else { //nothing is pressed
             lastMoveTime = -1;
             lastGroundMoveTime = -1;
+            lastSideTime = -1;
         }
 
         //jumping
@@ -378,36 +391,69 @@ public class ParkourTickListener {
             lastJumpTime = 0;
             hasActed = true;
 
-            //already jumped, started moving
-            if ((lastGroundMoveTime == 0 || lastMoveTime == 0) && !locked) {
-                lastTiming = "Jam";
-                /*
-                if (((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) != 0 && showMS) {
-                    lastTiming += " (" + ((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) + " ms)";
+            // 根据起跳时的按键，决定跳跃的“意图”
+            if ((lastGroundMoveTime == 0 || lastMoveTime == 0) && !locked) { // Jam 类型的瞬发跳跃
+                // 意图 1: Sidejam (A/D Jam) -> 这是潜在的 Mark
+                if (isSideKeyDown && !(isForwardDown || isBackDown)) {
+                    isPotentialMark = true;
+                    isPotentialStrafejam = false;
+                    lastTiming = "Sidejam"; // 正确的名称
                 }
-                */
-                if (gameSettings.keyBindSprint.isKeyDown() || !gameSettings.keyBindForward.isKeyDown()) {
-                    locked = true;
+                // 意图 2: Strafe Jam (W+A/D Jam) -> 这是计时松开A/D的跳法
+                else if (isSideKeyDown) {
+                    isPotentialStrafejam = true;
+                    isPotentialMark = false;
+                    lastTiming = "Strafe Jam"; // 正确的名称
+                    if (gameSettings.keyBindSprint.isKeyDown()){
+                        locked = true;
+                    }
                 }
-                //already moved on ground
-            } else if (lastGroundMoveTime > -1 && !locked && lastJumpTime == 0) {
+                // 意图 3: 普通 Jam -> 只按了前进键
+                else {
+                    isPotentialMark = false;
+                    isPotentialStrafejam = false;
+                    lastTiming = "Jam";
+                    if (gameSettings.keyBindSprint.isKeyDown()){
+                        locked = true;
+                    }
+                }
+            } else if (lastGroundMoveTime > -1 && !locked) { // Burst 类型的助跑跳跃
+                isPotentialMark = false;
+                isPotentialStrafejam = false;
                 if (lastSneakTime == -1) lastTiming = "Burst " + (lastGroundMoveTime) + " ticks";
                 else if (lastSneakTime > -1) lastTiming = "Burstjam " + (lastGroundMoveTime) + " ticks";
                 else lastTiming = "HH " + (lastGroundMoveTime) + " ticks";
-
-                /*
-                if (showMS && Math.abs((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) < 10000)
-                    lastTiming += " (" + ((gameSettings.keyBindJump.lastPressTime - earliestMoveTimestamp) / 1000000) + " ms)";
-                */
                 locked = true;
             }
 
-            //midair after jumping
-        } else if (!lastTick.onGround && lastJumpTime > -1) {
+        } else if (!lastTick.onGround && lastJumpTime > -1) { // 处于空中且正在计时
             lastJumpTime++;
-            //not midair not jumping
-        } else {
+
+            // 1. MARK 触发 (来自 Sidejam 后按 W)
+            if (isPotentialMark && !locked && gameSettings.keyBindForward.isKeyDown()) {
+                if (lastJumpTime == 1) {
+                    lastTiming = "Max Mark";
+                } else {
+                    lastTiming = "Mark " + lastJumpTime + " ticks";
+                }
+                locked = true;
+                isPotentialMark = false;
+            }
+
+            // 2. STRAFE JAM 触发 (来自 W+A/D Jam 后松开 A/D)
+            if (isPotentialStrafejam) {
+                if (isSideKeyDown) { // 只要还按着A/D，就实时更新
+                    lastTiming = "Strafe Jam " + (lastSideTime+1) + " ticks";
+                } else { // 一旦松开A/D，就锁定计时
+                    locked = true;
+                    isPotentialStrafejam = false;
+                }
+            }
+
+        } else { // 既不跳跃也不在空中 (可能已落地)
             lastJumpTime = -1;
+            if (isPotentialMark) isPotentialMark = false;
+            if (isPotentialStrafejam) isPotentialStrafejam = false; // 更新变量名
         }
 
         //sneaking
@@ -420,19 +466,25 @@ public class ParkourTickListener {
             else lastSneakTime = -1;
         }
 
-        if ((gameSettings.keyBindSprint.isKeyDown() || lastSprintTime != -1)
-                && !lastTick.onGround ) {
+        if ((gameSettings.keyBindSprint.isKeyDown() || lastSprintTime != -1) && !lastTick.onGround) {
             lastSprintTime++;
-            if (lastTiming.startsWith("Jam") && lastSprintTime == 0 && !locked && lastTick.keys[0]) {
-                if (lastJumpTime < 1) {
-                } else {
+
+            // FMM (来自普通 Jam)
+            if (lastTiming.startsWith("Jam") && !isPotentialMark && !isPotentialStrafejam && lastSprintTime == 0 && !locked && lastTick.keys[0]) {
+                if (lastJumpTime >= 1) {
                     if (lastJumpTime == 1) lastTiming = "Max FMM";
                     else lastTiming = "FMM " + (lastJumpTime) + " ticks";
-                    /*
-                    if (showMS && Math.abs((gameSettings.keyBindSprint.lastPressTime - gameSettings.keyBindJump.lastPressTime) / 1000000) < 10000)
-                        lastTiming += " (" + ((gameSettings.keyBindSprint.lastPressTime - gameSettings.keyBindJump.lastPressTime) / 1000000) + " ms)";
-                    */
                     locked = true;
+                }
+            }
+
+            // Strafe FMM (来自 Strafe Jam)
+            if (isPotentialStrafejam && lastSprintTime == 0 && !locked) {
+                if (lastJumpTime >= 1) {
+                    if (lastJumpTime == 1) lastTiming = "Max Strafe FMM";
+                    else lastTiming = "Strafe FMM " + lastJumpTime + " ticks";
+                    locked = true; // 锁定状态，覆盖 Strafe Jam 的显示
+                    isPotentialStrafejam = false; // 消耗掉状态
                 }
             }
 
@@ -480,6 +532,7 @@ public class ParkourTickListener {
         if (lastJumpTime > 999) lastJumpTime = 999;
         if (lastGroundMoveTime > 999) lastGroundMoveTime = 999;
         if (lastMoveTime > 999) lastMoveTime = 999;
+        if (lastSideTime > 999) lastSideTime = 999;
         if (lastSprintTime > 999) lastSprintTime = 999;
     }
 
@@ -488,6 +541,8 @@ public class ParkourTickListener {
         hasActed = false;
         grindStarted = false;
         hasCollided = false;
+        isPotentialMark = false;
+        isPotentialStrafejam = false;
     }
 
     public static class PosTick {

@@ -13,11 +13,11 @@ public class CommandColors extends CyvCommand {
 
     @Override
     public void run(ICommandSender sender, String[] args) {
-        String str = "List of colors usable:";
+        StringBuilder str = new StringBuilder("List of colors usable:");
         for (CyvClientColorHelper.CyvClientColor c : CyvClientColorHelper.colors) {
-            str += "\n" + c.chatColor + c.name;
+            str.append("\n").append(c.chatColor).append(c.name);
         }
 
-        CyvForge.sendChatMessage(str);
+        CyvForge.sendChatMessage(str.toString());
     }
 }

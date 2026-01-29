@@ -1,5 +1,7 @@
 package net.cyvforge.config;
 
+import net.minecraft.client.Minecraft;
+
 import java.util.ArrayList;
 
 public class CyvClientColorHelper {
@@ -9,7 +11,7 @@ public class CyvClientColorHelper {
     public static String[] colorStrings;
 
     static {
-        colors = new ArrayList<CyvClientColor>();
+        colors = new ArrayList<>();
         colors.add(new CyvClientColor("dark_red", ChatFormattingString.DARK_RED, 11141120));
         colors.add(new CyvClientColor("red", ChatFormattingString.RED, 16733525));
         colors.add(new CyvClientColor("gold", ChatFormattingString.GOLD, 16755200));
@@ -74,7 +76,7 @@ public class CyvClientColorHelper {
         CyvClientColor(String name, String chatColor, long drawColor) {
             this.name = name;
             this.chatColor = chatColor;
-            this.drawColor = 0xFF000000+drawColor;
+            this.drawColor = 0xFF000000L +drawColor;
         }
     }
 

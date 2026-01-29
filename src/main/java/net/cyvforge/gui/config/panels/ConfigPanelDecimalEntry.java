@@ -11,6 +11,8 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
+
 public class ConfigPanelDecimalEntry implements ConfigPanel {
     public GuiTextField field;
     public String configOption;
@@ -26,14 +28,14 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
     private double minBound = -Double.MAX_VALUE;
     private double maxBound = Double.MAX_VALUE;
 
-    public ConfigPanelDecimalEntry(int index, String configOption, String displayString, double min, double max, GuiModConfig screenIn) {
-        this(index, configOption, displayString, screenIn);
+    public ConfigPanelDecimalEntry(ArrayList<ConfigPanel> array, String configOption, String displayString, double min, double max, GuiModConfig screenIn) {
+        this(array, configOption, displayString, screenIn);
         this.minBound = min;
         this.maxBound = max;
     }
 
-    public ConfigPanelDecimalEntry(int index, String configOption, String displayString, GuiModConfig screenIn) {
-        this.index = index;
+    public ConfigPanelDecimalEntry(ArrayList<ConfigPanel> array, String configOption, String displayString, GuiModConfig screenIn) {
+        this.index = array.size();
         this.displayString = displayString;
         this.configOption = configOption;
         this.screenIn = screenIn;
@@ -94,7 +96,7 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
     public void save() {
         double val = 0;
         try {
-            val = MathHelper.clamp(Double.valueOf(this.field.getText()), this.minBound, this.maxBound);
+            val = MathHelper.clamp(Double.parseDouble(this.field.getText()), this.minBound, this.maxBound);
             this.field.setText(val+"");
             CyvClientConfig.set(this.configOption, val);
         } catch (Exception e) {}
@@ -114,7 +116,7 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
     public void unselect() {
         this.field.setFocused(false);
         try {
-            double val = MathHelper.clamp(Double.valueOf(this.field.getText()), this.minBound, this.maxBound);
+            double val = MathHelper.clamp(Double.parseDouble(this.field.getText()), this.minBound, this.maxBound);
             this.field.setText(val+"");
             CyvClientConfig.set(this.configOption, val);
         } catch (Exception e) {}

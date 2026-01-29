@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 public class KeybindingRunMacro extends CyvKeybinding {
     public KeybindingRunMacro() {
-        super("Run Macro", Keyboard.KEY_V);
+        super("key.runmacro.desc", Keyboard.KEY_V);
     }
 
     @Override
