@@ -20,10 +20,10 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
     public final int index;
     public GuiModConfig screenIn;
 
-    private int xPosition;
-    private int yPosition;
-    private int sizeX;
-    private int sizeY;
+    private final int xPosition;
+    private final int yPosition;
+    private final int sizeX;
+    private final int sizeY;
 
     private double minBound = -Double.MAX_VALUE;
     private double maxBound = Double.MAX_VALUE;
@@ -71,9 +71,8 @@ public class ConfigPanelDecimalEntry implements ConfigPanel {
 
     @Override
     public boolean mouseInBounds(int mouseX, int mouseY) {
-        if (mouseX > this.xPosition+this.sizeX/2 && mouseY > this.yPosition
-                && mouseX < this.xPosition+this.sizeX && mouseY < this.yPosition+this.sizeY) return true;
-        return false;
+        return mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
+                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY;
     }
 
     @Override

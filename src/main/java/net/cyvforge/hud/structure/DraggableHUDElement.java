@@ -63,8 +63,6 @@ public abstract class DraggableHUDElement implements IRenderer {
         CyvClientConfig.set(this.getName()+"_posx", this.position.getAbsoluteX());
         CyvClientConfig.set(this.getName()+"_posy", this.position.getAbsoluteY());
 
-        return;
-
     }
 
     public void setEnabled(boolean isEnabled) {

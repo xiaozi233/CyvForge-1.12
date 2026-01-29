@@ -20,10 +20,10 @@ public class ConfigPanelIntegerSlider implements ConfigPanel {
     public final int index;
     public GuiModConfig screenIn;
 
-    private int xPosition;
-    private int yPosition;
-    private int sizeX;
-    private int sizeY;
+    private final int xPosition;
+    private final int yPosition;
+    private final int sizeX;
+    private final int sizeY;
 
     public ConfigPanelIntegerSlider(ArrayList<ConfigPanel> array, String configOption, String displayString, int minValue, int maxValue, GuiModConfig screenIn) {
         this.index = array.size();
@@ -50,8 +50,8 @@ public class ConfigPanelIntegerSlider implements ConfigPanel {
         //bg
         GuiUtils.drawRoundedRect(this.xPosition+this.sizeX/2, this.yPosition-scroll, this.xPosition+this.sizeX, this.yPosition+this.sizeY-scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvForge.theme.shade1 : CyvForge.theme.shade2);
         //slider
-        GuiUtils.drawRoundedRect(this.xPosition+this.sizeX/2+(int)(sizeX/2 * (sliderValue-minValue)/(maxValue-minValue))-3, this.yPosition-1-scroll,
-                this.xPosition+this.sizeX/2+(int)(sizeX/2 * (sliderValue-minValue)/(maxValue-minValue))+3, this.yPosition+this.sizeY+1-scroll, 1, CyvForge.theme.mainBase());
+        GuiUtils.drawRoundedRect(this.xPosition+this.sizeX/2+ (sizeX/2 * (sliderValue-minValue)/(maxValue-minValue)) -3, this.yPosition-1-scroll,
+                this.xPosition+this.sizeX/2+ (sizeX/2 * (sliderValue-minValue)/(maxValue-minValue)) +3, this.yPosition+this.sizeY+1-scroll, 1, CyvForge.theme.mainBase());
         //amount
         GuiUtils.drawCenteredString(" "+this.sliderValue, this.xPosition+this.sizeX*3/4, this.yPosition+this.sizeY/2-Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT/2+1-scroll, 0xFFFFFFFF, true);
 
@@ -60,16 +60,15 @@ public class ConfigPanelIntegerSlider implements ConfigPanel {
     @Override
     public void mouseDragged(int mouseX, int mouseY) {
         this.sliderValue = (int)((mouseX+2-(this.xPosition+this.sizeX/2))/(float)(this.sizeX/2) * (this.maxValue - this.minValue)) + this.minValue;
-        this.sliderValue = (int) MathHelper.clamp(this.sliderValue, this.minValue, this.maxValue);
+        this.sliderValue = MathHelper.clamp(this.sliderValue, this.minValue, this.maxValue);
         CyvClientConfig.set(this.configOption, this.sliderValue);
         onValueChange();
     }
 
     @Override
     public boolean mouseInBounds(int mouseX, int mouseY) {
-        if (mouseX > this.xPosition+this.sizeX/2 && mouseY > this.yPosition
-                && mouseX < this.xPosition+this.sizeX && mouseY < this.yPosition+this.sizeY) return true;
-        return false;
+        return mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
+                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY;
     }
 
     @Override

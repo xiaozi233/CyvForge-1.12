@@ -64,7 +64,7 @@ public class CommandHelp extends CyvCommand {
                          }
                      } else {
                          targetCommand = cmd;
-                         break Outer;
+                         break;
                      }
                  }
 
@@ -74,7 +74,6 @@ public class CommandHelp extends CyvCommand {
 
              if (targetCommand == null) {
                  CyvForge.sendChatMessage("Command not found. Use " + commandPath + " for a list of commands.");
-                 return;
 
              } else {
                  List<String> commandNames = new ArrayList<String>();
@@ -89,7 +88,6 @@ public class CommandHelp extends CyvCommand {
                          "\247oNote: Use " + commandPath + " to list subcommands."
                  );
 
-                 return;
              }
 
          }

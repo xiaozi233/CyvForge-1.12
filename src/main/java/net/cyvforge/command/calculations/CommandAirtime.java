@@ -50,7 +50,7 @@ public class CommandAirtime extends CyvCommand {
                 ticks++;
             }
 
-            CyvForge.sendChatMessage("Airtime: " + Double.toString(ticks) + " ticks");
+            CyvForge.sendChatMessage("Airtime: " + ticks + " ticks");
 
         } catch (Exception e) {
             CyvForge.sendChatMessage("Please input a valid jump.");

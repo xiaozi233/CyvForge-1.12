@@ -35,7 +35,7 @@ public class DefaultCommand extends CommandBase {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.<String>asList(new String[] {"mpk", "mm"});
+        return Arrays.asList("mpk", "mm");
     }
 
     @SuppressWarnings("deprecation")
@@ -72,7 +72,6 @@ public class DefaultCommand extends CommandBase {
 
         } else { //no command listed
             CyvForge.sendChatMessage("Use /cyv help for a list of commands.");
-            return;
 
         }
     }

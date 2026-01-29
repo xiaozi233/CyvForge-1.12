@@ -17,7 +17,6 @@ public abstract class SpecialFunction extends Function {
 	@Override //This method is not used
 	public final void run(Player player, int duration, float facing, ArrayList<Character> modifiers, HashMap<String,Double> effects) 
 			throws DurationException, InvalidKeypressException {
-		return;
-	}
+    }
 	
 }

@@ -239,9 +239,9 @@ public class LabelBundleLandingPB extends LabelBundle {
                 StringBuilder str = new StringBuilder("0.");
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str.append("0");
 
-                drawString("Z PB: ", pos.getAbsoluteX() + 1, (int) (pos.getAbsoluteY() + 1), color1);
+                drawString("Z PB: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
                 drawString(str.toString(), pos.getAbsoluteX() + 1 + font.getStringWidth("Z PB: ")
-                        , (int) (pos.getAbsoluteY() + 1), color2);
+                        , pos.getAbsoluteY() + 1, color2);
             }
         });
     }

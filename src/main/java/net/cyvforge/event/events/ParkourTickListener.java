@@ -613,15 +613,15 @@ public class ParkourTickListener {
 
         int strafe() {
             int i = 0;
-            if (keys[1] == true) i--;
-            if (keys[3] == true) i++;
+            if (keys[1]) i--;
+            if (keys[3]) i++;
             return i;
         }
 
         int forward() {
             int i = 0;
-            if (keys[0] == true) i++;
-            if (keys[3] == true) i--;
+            if (keys[0]) i++;
+            if (keys[3]) i--;
             return i;
         }
 

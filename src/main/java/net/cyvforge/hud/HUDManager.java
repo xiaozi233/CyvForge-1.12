@@ -1,6 +1,5 @@
 package net.cyvforge.hud;
 
-import net.cyvforge.CyvForge;
 import net.cyvforge.command.mpk.CommandMacro;
 import net.cyvforge.gui.GuiMPK;
 import net.cyvforge.gui.GuiModConfig;
@@ -17,17 +16,15 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HUDManager {
-    public static List<DraggableHUDElement> registeredRenderers = new ArrayList<DraggableHUDElement>();
-    private static Minecraft mc = Minecraft.getMinecraft();
+    public static List<DraggableHUDElement> registeredRenderers = new ArrayList<>();
+    private static final Minecraft mc = Minecraft.getMinecraft();
     public HUDManager instance;
 
     public HUDManager() { //initialize and create eventlistener

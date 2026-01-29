@@ -304,9 +304,8 @@ public class Parser {
 		
 		player.finalX = player.xOf;
 		player.finalZ = player.zOf;
-		
-		return;
-	}
+
+    }
 	
 	//identify and run command
 	void run_function(Player player, String function, double arg1, float facing, ArrayList<Character> modifiers, HashMap<String,Double> effects) throws Exception {

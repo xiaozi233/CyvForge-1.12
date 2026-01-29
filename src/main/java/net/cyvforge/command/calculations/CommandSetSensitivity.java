@@ -42,7 +42,6 @@ public class CommandSetSensitivity extends CyvCommand {
 
         } catch (Exception e) {
             CyvForge.sendChatMessage("Please input a valid sensitivity constant (100% = 0.5)");
-            return;
 
         }
     }

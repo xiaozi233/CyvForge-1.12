@@ -4,9 +4,9 @@ public interface IRenderer {
     int getWidth();
     int getHeight();
 
-    public void save(ScreenPosition pos);
+    void save(ScreenPosition pos);
 
-    public ScreenPosition load();
+    ScreenPosition load();
 
     void render(ScreenPosition pos);
 

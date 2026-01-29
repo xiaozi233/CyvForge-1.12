@@ -70,22 +70,18 @@ public class LandingBlockOffset {
             currentPb = pb;
             currentXOffset = xOffset;
             currentZOffset = zOffset;
-            if (((CyvClientConfig.getBoolean("sendLbChatOffset", false) && b == ParkourTickListener.landingBlock) ||
-                    (CyvClientConfig.getBoolean("sendMmChatOffset", false) && b == ParkourTickListener.momentumBlock ))
-                    && (eventX <= b.xMaxCond + playerLengthX/2 && eventX >= b.xMinCond - playerLengthX/2 &&
-                    eventZ <= b.zMaxCond + playerLengthZ/2 && eventZ >= b.zMinCond - playerLengthZ/2)) {
-                sendChatOffset = true;
-            } else sendChatOffset = false;
+            sendChatOffset = ((CyvClientConfig.getBoolean("sendLbChatOffset", false) && b == ParkourTickListener.landingBlock) ||
+                    (CyvClientConfig.getBoolean("sendMmChatOffset", false) && b == ParkourTickListener.momentumBlock))
+                    && (eventX <= b.xMaxCond + playerLengthX / 2 && eventX >= b.xMinCond - playerLengthX / 2 &&
+                    eventZ <= b.zMaxCond + playerLengthZ / 2 && eventZ >= b.zMinCond - playerLengthZ / 2);
         } else if (pb > currentPb) {
             currentPb = pb;
             currentXOffset = xOffset;
             currentZOffset = zOffset;
-            if (((CyvClientConfig.getBoolean("sendLbChatOffset", false) && b == ParkourTickListener.landingBlock) ||
-                    (CyvClientConfig.getBoolean("sendMmChatOffset", false) && b == ParkourTickListener.momentumBlock ))
-                    && (eventX <= b.xMaxCond + playerLengthX/2 && eventX >= b.xMinCond - playerLengthX/2 &&
-                    eventZ <= b.zMaxCond + playerLengthZ/2 && eventZ >= b.zMinCond - playerLengthZ/2)) {
-                sendChatOffset = true;
-            } else sendChatOffset = false;
+            sendChatOffset = ((CyvClientConfig.getBoolean("sendLbChatOffset", false) && b == ParkourTickListener.landingBlock) ||
+                    (CyvClientConfig.getBoolean("sendMmChatOffset", false) && b == ParkourTickListener.momentumBlock))
+                    && (eventX <= b.xMaxCond + playerLengthX / 2 && eventX >= b.xMinCond - playerLengthX / 2 &&
+                    eventZ <= b.zMaxCond + playerLengthZ / 2 && eventZ >= b.zMinCond - playerLengthZ / 2);
         }
 
     }

@@ -70,7 +70,7 @@ public class CommandGiveCheckpointGenerator extends CyvCommand {
             String name;
 
             if (args.length > 5) {
-                String[] customName = (String[]) Arrays.copyOfRange(args, 5, args.length);
+                String[] customName = Arrays.copyOfRange(args, 5, args.length);
                 String joinedCustomName = String.join(" ", customName);
 
                 name = ChatFormattingString.RED+joinedCustomName;

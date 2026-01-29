@@ -77,8 +77,7 @@ public class CyvGui extends GuiScreen {
 
         public boolean clicked(int mouseX, int mouseY, int mouseButton) {
             if (!this.enabled) return false;
-            if (!(mouseX > x && mouseX < x+sizeX && mouseY > y && mouseY < y+sizeY && mouseButton == 0)) return false;
-            else return true;
+            return mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY && mouseButton == 0;
         }
 
         public void setX(int x) {

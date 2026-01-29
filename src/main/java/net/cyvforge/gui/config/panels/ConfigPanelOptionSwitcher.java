@@ -18,10 +18,10 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
     public final T[] sliderValues;
     public GuiModConfig screenIn;
 
-    private int xPosition;
-    private int yPosition;
-    private int sizeX;
-    private int sizeY;
+    private final int xPosition;
+    private final int yPosition;
+    private final int sizeX;
+    private final int sizeY;
 
     public ConfigPanelOptionSwitcher(ArrayList<ConfigPanel> array, String configOption, String displayString, T[] options, GuiModConfig screenIn) {
         this.index = array.size();
@@ -66,9 +66,8 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
 
     @Override
     public boolean mouseInBounds(int mouseX, int mouseY) {
-        if (mouseX > this.xPosition+this.sizeX/2 && mouseY > this.yPosition
-                && mouseX < this.xPosition+this.sizeX && mouseY < this.yPosition+this.sizeY) return true;
-        return false;
+        return mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
+                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY;
     }
 
     @Override

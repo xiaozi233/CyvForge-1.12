@@ -190,7 +190,7 @@ public class GuiMPK extends CyvGui {
 
         int top = sr.getScaledHeight()/2-sizeY/2+4+15;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
         if (maxScroll == 0) amount = top;
 
         int color = CyvForge.theme.border2;
@@ -221,7 +221,7 @@ public class GuiMPK extends CyvGui {
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
         int top = sr.getScaledHeight()/2-sizeY/2+4+15;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
         if (maxScroll == 0) amount = top;
 
         // check scrollbar
@@ -322,11 +322,7 @@ public class GuiMPK extends CyvGui {
 
         public boolean isPressed(int slotIndex, int mouseX, int mouseY, int mouseEvent) {
             float yHeight = (slotIndex + 1) * fontRenderer.FONT_HEIGHT*2 - scroll + (sr.getScaledHeight()/2 - sizeY/2);
-            if (mouseX > xStart && mouseX < xStart + width && mouseY > yHeight && mouseY < yHeight + height) {
-                return true;
-            }
-
-            return false;
+            return mouseX > xStart && mouseX < xStart + width && mouseY > yHeight && mouseY < yHeight + height;
         }
 
         public void mouseClicked(int slotIndex, int mouseX, int mouseY, int mouseEvent) {

@@ -104,7 +104,7 @@ public class CyvClientConfig {
         }
     }
 
-    public static enum Type {
+    public enum Type {
         UNKNOWN, INTEGER, LONG, DOUBLE, BOOLEAN, CHARACTER, STRING
     }
 

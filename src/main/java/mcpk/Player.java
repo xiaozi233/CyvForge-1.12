@@ -99,7 +99,7 @@ public class Player {
 
 			//movement multipliers
 			float accel = 0;
-			double drag = (float) (0.91F) * slip;
+			double drag = 0.91F * slip;
 			if (airborne) {
 				accel = 0.02F;
 				if (sprinting) accel = (float) (accel + accel * 0.3);
@@ -113,7 +113,7 @@ public class Player {
 			
 			//sprintjump boost
 			if (sprinting && jumping) {
-				float angle = (float) (facing * 0.017453292F);
+				float angle = facing * 0.017453292F;
 				
 				this.vz += (boost * MathHelper.cos(angle));
 				this.vx -= (boost * MathHelper.sin(angle));
@@ -126,14 +126,14 @@ public class Player {
 			
 			//sneaking
 			if (sneaking) {
-				forward = (float) (((float) forward) * 0.3D);
-				strafing = (float) (((float) strafing) * 0.3D);
+				forward = (float) (forward * 0.3D);
+				strafing = (float) (strafing * 0.3D);
 			}
 			
 			forward *= 0.98F;
 			strafing *= 0.98F;
 			
-			float distance = (float) (strafing * strafing + forward * forward);
+			float distance = strafing * strafing + forward * forward;
 			
 			if (distance >= 1.0E-4F) {
 				distance = (float) Math.sqrt(distance);
@@ -143,10 +143,10 @@ public class Player {
 				strafing = strafing * distance;
 				forward = forward * distance;
 				
-				float angle = (float) (facing * 3.14159265358979323846F / 180F);
+				float angle = facing * 3.14159265358979323846F / 180F;
 				
-				this.vx += (float) (strafing * MathHelper.cos(angle) - forward * MathHelper.sin(angle));
-				this.vz += (float) (forward * MathHelper.cos(angle) + strafing * MathHelper.sin(angle));
+				this.vx += strafing * MathHelper.cos(angle) - forward * MathHelper.sin(angle);
+				this.vz += forward * MathHelper.cos(angle) + strafing * MathHelper.sin(angle);
 			}
 			
 			last_slip = slip;

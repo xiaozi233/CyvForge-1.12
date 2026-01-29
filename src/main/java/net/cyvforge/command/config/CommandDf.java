@@ -33,7 +33,7 @@ public class CommandDf extends CyvCommand {
 
                 DecimalFormatSymbols s = new DecimalFormatSymbols();
                 s.setDecimalSeparator('.');
-                CyvForge.df.setDecimalFormatSymbols(s);;
+                CyvForge.df.setDecimalFormatSymbols(s);
                 CyvForge.sendChatMessage("Decimal precision set to " + df + ".");
             } else {
                 CyvForge.sendChatMessage("Please enter a valid number from 0-16.");

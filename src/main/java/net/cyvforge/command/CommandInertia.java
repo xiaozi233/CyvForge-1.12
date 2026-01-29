@@ -21,7 +21,7 @@ public class CommandInertia extends CyvCommand {
         //add a checker for no args to not toggle on/off inertia
 
         if (args.length != 0) {
-            subcategory = args[0].toString().toLowerCase();
+            subcategory = args[0].toLowerCase();
         }
 
         if (subcategory.equals("toggle")) {
@@ -50,10 +50,10 @@ public class CommandInertia extends CyvCommand {
             }
 
         } else if (subcategory.equals("mode") || subcategory.equals("axis")) {
-            if (args[1].toLowerCase().equals("x")) {
+            if (args[1].equalsIgnoreCase("x")) {
                 CyvClientConfig.set("inertiaAxis", 'x');
                 CyvForge.sendChatMessage("Inertia axis set to x.");
-            } else if (args[1].toLowerCase().equals("z")) {
+            } else if (args[1].equalsIgnoreCase("z")) {
                 CyvClientConfig.set("inertiaAxis", 'z');
                 CyvForge.sendChatMessage("Inertia axis set to z.");
             } else {
@@ -73,13 +73,13 @@ public class CommandInertia extends CyvCommand {
             }
 
         } else if (subcategory.equals("ground") || subcategory.equals("groundmode") || subcategory.equals("groundtype")) {
-            if (args[1].toLowerCase().equals("normal")) {
+            if (args[1].equalsIgnoreCase("normal")) {
                 CyvClientConfig.set("inertiaGroundType", "normal");
                 CyvForge.sendChatMessage("Ground type set to normal.");
-            } else if (args[1].toLowerCase().equals("ice")) {
+            } else if (args[1].equalsIgnoreCase("ice")) {
                 CyvClientConfig.set("inertiaGroundType", "ice");
                 CyvForge.sendChatMessage("Ground type set to ice.");
-            } else if (args[1].toLowerCase().equals("slime")) {
+            } else if (args[1].equalsIgnoreCase("slime")) {
                 CyvClientConfig.set("inertiaGroundType", "slime");
                 CyvForge.sendChatMessage("Ground type set to slime.");
             } else {

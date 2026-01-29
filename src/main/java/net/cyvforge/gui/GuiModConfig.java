@@ -93,7 +93,7 @@ public class GuiModConfig extends CyvGui {
 
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
 
         if (maxScroll == 0) amount = top;
 
@@ -230,7 +230,7 @@ public class GuiModConfig extends CyvGui {
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
 
         if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
                 mouseY > amount && mouseY < amount+scrollbarHeight) {
@@ -303,8 +303,7 @@ public class GuiModConfig extends CyvGui {
         }
 
         boolean clicked(double mouseX, double mouseY, int mouseButton) {
-            if (!(mouseX > x && mouseX < x+sizeX && mouseY > y && mouseY < y+sizeY && mouseButton == 0)) return false;
-            else return true;
+            return mouseX > x && mouseX < x + sizeX && mouseY > y && mouseY < y + sizeY && mouseButton == 0;
         }
 
     }

@@ -19,10 +19,10 @@ public class ConfigPanelToggleModes implements ConfigPanel {
 
     public final String s1, s2;
 
-    private int xPosition;
-    private int yPosition;
-    private int sizeX;
-    private int sizeY;
+    private final int xPosition;
+    private final int yPosition;
+    private final int sizeX;
+    private final int sizeY;
 
     public ConfigPanelToggleModes(ArrayList<ConfigPanel> array, String configOption, String displayString, String s1, String s2, GuiModConfig screenIn) {
         this.index = array.size();
@@ -62,9 +62,8 @@ public class ConfigPanelToggleModes implements ConfigPanel {
 
     @Override
     public boolean mouseInBounds(int mouseX, int mouseY) {
-        if (mouseX > this.xPosition+this.sizeX/2 && mouseY > this.yPosition
-                && mouseX < this.xPosition+this.sizeX && mouseY < this.yPosition+this.sizeY) return true;
-        return false;
+        return mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
+                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY;
     }
 
     @Override

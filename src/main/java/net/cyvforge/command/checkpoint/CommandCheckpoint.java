@@ -104,7 +104,7 @@ public class CommandCheckpoint extends CyvCommand {
             player.getHeldItem(EnumHand.MAIN_HAND).setTagCompound(nbt);
 
             if (args.length > 5) {
-                String[] customName = (String[]) Arrays.copyOfRange(args, 5, args.length);
+                String[] customName = Arrays.copyOfRange(args, 5, args.length);
                 String joinedCustomName = String.join(" ", customName);
 
                 player.getHeldItem(EnumHand.MAIN_HAND).setStackDisplayName(ChatFormattingString.RED+joinedCustomName);

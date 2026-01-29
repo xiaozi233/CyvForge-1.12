@@ -173,7 +173,7 @@ public class GuiMacro extends CyvGui {
 
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
 
         if (maxScroll == 0) amount = top;
 
@@ -206,7 +206,7 @@ public class GuiMacro extends CyvGui {
         int scrollbarHeight = (int) ((sizeY - 8)/(0.01*maxScroll+1));
         int top = sr.getScaledHeight()/2-sizeY/2+4;
         int bottom = sr.getScaledHeight()/2+sizeY/2-4 - scrollbarHeight;
-        int amount = (int) (top + (bottom - top) * ((float) scroll/maxScroll));
+        int amount = (int) (top + (bottom - top) * (scroll /maxScroll));
 
         if (mouseX > sr.getScaledWidth()/2+sizeX/2+2 && mouseX < sr.getScaledWidth()/2+sizeX/2+8 &&
                 mouseY > amount && mouseY < amount+scrollbarHeight) {
@@ -357,8 +357,7 @@ public class GuiMacro extends CyvGui {
         this.vScroll *= 0.75;
 
         if (this.fileName.getText().isEmpty() || this.fileName.getText().length() > 32) this.loadFile.setEnabled(false);
-        else if (this.fileName.getText().equals(CyvClientConfig.getString("currentMacro", "macro"))) this.loadFile.setEnabled(false);
-        else this.loadFile.setEnabled(true);
+        else this.loadFile.setEnabled(!this.fileName.getText().equals(CyvClientConfig.getString("currentMacro", "macro")));
     }
 
     @Override
@@ -471,11 +470,7 @@ public class GuiMacro extends CyvGui {
 
         public boolean isPressed(int slotIndex, int mouseX, int mouseY, int mouseEvent) {
             float yHeight = (slotIndex + 1) * mc.fontRenderer.FONT_HEIGHT*2 - scroll + (sr.getScaledHeight()/2 - sizeY/2);
-            if (mouseX > xStart && mouseX < xStart + width && mouseY > yHeight && mouseY < yHeight + height) {
-                return true;
-            }
-
-            return false;
+            return mouseX > xStart && mouseX < xStart + width && mouseY > yHeight && mouseY < yHeight + height;
         }
 
         public void mouseClicked(int slotIndex, int mouseX, int mouseY, int mouseEvent) {

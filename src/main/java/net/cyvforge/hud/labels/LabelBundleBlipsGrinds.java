@@ -22,7 +22,7 @@ public class LabelBundleBlipsGrinds extends LabelBundle {
                 StringBuilder str = new StringBuilder("000000.");
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str.append("0");
                 return Minecraft.getMinecraft().fontRenderer
-                        .getStringWidth("Blip: 00000 chained / y: " + str.toString());
+                        .getStringWidth("Blip: 00000 chained / y: " + str);
             }
             public int getHeight() {return getLabelHeight();}
             public boolean enabledByDefault() {return false;}

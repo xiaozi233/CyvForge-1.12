@@ -1,7 +1,5 @@
 package net.cyvforge.config;
 
-import net.minecraft.client.Minecraft;
-
 import java.util.ArrayList;
 
 public class CyvClientColorHelper {

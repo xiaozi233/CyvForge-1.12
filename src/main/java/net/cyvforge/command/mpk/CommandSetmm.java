@@ -58,7 +58,6 @@ public class CommandSetmm extends CyvCommand {
 
                         if (list != null && list.isEmpty()) {
                             CyvForge.sendChatMessage("Please look at a valid block.");
-                            return;
                         } else {
                             ParkourTickListener.momentumBlock = new LandingBlock(pos, mode, axis, box);
                             CyvForge.sendChatMessage("Successfully set landing block.");
@@ -68,7 +67,6 @@ public class CommandSetmm extends CyvCommand {
                     }
                 } else {
                     CyvForge.sendChatMessage("Please look at a valid block.");
-                    return;
                 }
             }
             else {
@@ -83,7 +81,6 @@ public class CommandSetmm extends CyvCommand {
 
                     if (list != null && list.isEmpty()) {
                         CyvForge.sendChatMessage("Please stand on a valid block.");
-                        return;
                     } else {
                         ParkourTickListener.momentumBlock = new LandingBlock(pos, mode, axis, box);
                         CyvForge.sendChatMessage("Successfully set landing block.");
@@ -91,7 +88,6 @@ public class CommandSetmm extends CyvCommand {
 
                 } else {
                     CyvForge.sendChatMessage("Please stand on a valid block.");
-                    return;
                 }
             }
         }, "Set landing block").start();

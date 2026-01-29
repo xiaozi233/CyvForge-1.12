@@ -111,7 +111,6 @@ public class GuiHUDPositions extends CyvGui {
             }
         }
 
-        return;
     }
 
     @Override
@@ -170,7 +169,8 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     private class MouseOverFinder implements Predicate<IRenderer> {
-        private int mouseX, mouseY;
+        private final int mouseX;
+        private final int mouseY;
 
         public MouseOverFinder(int x, int y) {
             this.mouseX = x; this.mouseY = y;
@@ -183,9 +183,7 @@ public class GuiHUDPositions extends CyvGui {
             int absoluteY = pos.getAbsoluteY();
 
             if (mouseX >= absoluteX && mouseX <= absoluteX + renderer.getWidth()) {
-                if (mouseY >= absoluteY && mouseY <= absoluteY + renderer.getHeight()) {
-                    return true;
-                }
+                return mouseY >= absoluteY && mouseY <= absoluteY + renderer.getHeight();
             }
 
             return false;

@@ -42,7 +42,7 @@ public class CheckpointTeleport {
     {
         if (teleportingEntity instanceof EntityPlayerMP)
         {
-            Set<SPacketPlayerPosLook.EnumFlags> set = EnumSet.<SPacketPlayerPosLook.EnumFlags>noneOf(SPacketPlayerPosLook.EnumFlags.class);
+            Set<SPacketPlayerPosLook.EnumFlags> set = EnumSet.noneOf(SPacketPlayerPosLook.EnumFlags.class);
             float f = (float)argYaw.getAmount();
 
             if (argYaw.isRelative())

@@ -72,7 +72,7 @@ public class MathUtils
     static {
         int i;
         for (i = 0; i < 65536; ++i) ASIN_TABLE[i] = (float)Math.asin((double)i / 32767.5D - 1.0D);
-        for (i = -1; i < 2; ++i) ASIN_TABLE[(int)(((double)i + 1.0D) * 32767.5D) & 65535] = (float)Math.asin((double)i);
+        for (i = -1; i < 2; ++i) ASIN_TABLE[(int)(((double)i + 1.0D) * 32767.5D) & 65535] = (float)Math.asin(i);
         for (i = 0; i < 360; i++) b[i] = Math.sin(Math.toRadians(i));
     }
 }
