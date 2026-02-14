@@ -640,7 +640,7 @@ public class ParkourTickListener {
         int forward() {
             int i = 0;
             if (keys[0]) i++;
-            if (keys[3]) i--;
+            if (keys[2]) i--;
             return i;
         }
 
