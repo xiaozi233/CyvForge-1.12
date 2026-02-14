@@ -22,8 +22,8 @@ public class LabelBundleTurningAngles extends LabelBundle {
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 103);}
             public void render(ScreenPosition pos) {
                 if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 DecimalFormat df = CyvForge.df;
@@ -33,8 +33,8 @@ public class LabelBundleTurningAngles extends LabelBundle {
                         , pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
                 StringBuilder str = new StringBuilder("0.");
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str.append("0");
@@ -53,8 +53,8 @@ public class LabelBundleTurningAngles extends LabelBundle {
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 112);}
             public void render(ScreenPosition pos) {
                 if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 DecimalFormat df = CyvForge.df;
@@ -65,8 +65,8 @@ public class LabelBundleTurningAngles extends LabelBundle {
                         pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 StringBuilder str = new StringBuilder("0.");
@@ -86,8 +86,8 @@ public class LabelBundleTurningAngles extends LabelBundle {
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 121);}
             public void render(ScreenPosition pos) {
                 if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 DecimalFormat df = CyvForge.df;
@@ -98,8 +98,8 @@ public class LabelBundleTurningAngles extends LabelBundle {
                         pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 StringBuilder str = new StringBuilder("0.");

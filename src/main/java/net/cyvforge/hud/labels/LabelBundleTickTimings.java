@@ -1,7 +1,6 @@
 package net.cyvforge.hud.labels;
 
 import net.cyvforge.config.CyvClientColorHelper;
-import net.cyvforge.config.CyvClientConfig;
 import net.cyvforge.event.events.ParkourTickListener;
 import net.cyvforge.hud.LabelBundle;
 import net.cyvforge.hud.structure.DraggableHUDElement;
@@ -22,8 +21,8 @@ public class LabelBundleTickTimings extends LabelBundle {
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 56);}
             public void render(ScreenPosition pos) {
                 if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 String timing = ParkourTickListener.lastTiming;
@@ -32,8 +31,8 @@ public class LabelBundleTickTimings extends LabelBundle {
                         , pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 drawString("Last Timing: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
@@ -50,8 +49,8 @@ public class LabelBundleTickTimings extends LabelBundle {
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 65);}
             public void render(ScreenPosition pos) {
                 if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 int airtime = ParkourTickListener.lastAirtime;
@@ -61,8 +60,8 @@ public class LabelBundleTickTimings extends LabelBundle {
                         pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 drawString("Airtime: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
@@ -80,8 +79,8 @@ public class LabelBundleTickTimings extends LabelBundle {
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(177, 137);}
             public void render(ScreenPosition pos) {
                 if (!this.isVisible) return;
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 int airtime = 12 - ParkourTickListener.lastAirtime;
@@ -91,8 +90,8 @@ public class LabelBundleTickTimings extends LabelBundle {
                         pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
-                long color1 = CyvClientColorHelper.color1.drawColor;
-                long color2 = CyvClientColorHelper.color2.drawColor;
+                long color1 = CyvClientColorHelper.color1.getDrawColor();
+                long color2 = CyvClientColorHelper.color2.getDrawColor();
                 FontRenderer font = mc.fontRenderer;
 
                 drawString("Tier: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);

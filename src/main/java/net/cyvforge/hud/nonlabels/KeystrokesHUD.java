@@ -57,7 +57,7 @@ public class KeystrokesHUD extends DraggableHUDElement {
 
             GuiUtils.drawCenteredString(displayString, pos.getAbsoluteX() + key.x + key.width/2,
                     pos.getAbsoluteY() + key.y + key.height/2 - (int)(mc.fontRenderer.FONT_HEIGHT * (size*scale/66.0F)/2) + 1,
-                    key.isDown() ? (int) CyvClientColorHelper.color1.drawColor : Color.white.getRGB(), true);
+                    key.isDown() ? (int) CyvClientColorHelper.color1.getDrawColor() : Color.white.getRGB(), true);
         }
     }
 

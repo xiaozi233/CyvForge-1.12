@@ -36,8 +36,8 @@ public class LabelTime extends DraggableHUDElement {
 
     @Override
     public void render(ScreenPosition pos) {
-        long color1 = CyvClientColorHelper.color1.drawColor;
-        long color2 = CyvClientColorHelper.color2.drawColor;
+        long color1 = CyvClientColorHelper.color1.getDrawColor();
+        long color2 = CyvClientColorHelper.color2.getDrawColor();
         FontRenderer font = mc.fontRenderer;
 
         LocalDateTime now = LocalDateTime.now();
@@ -49,8 +49,8 @@ public class LabelTime extends DraggableHUDElement {
 
     @Override
     public void renderDummy(ScreenPosition pos) {
-        long color1 = CyvClientColorHelper.color1.drawColor;
-        long color2 = CyvClientColorHelper.color2.drawColor;
+        long color1 = CyvClientColorHelper.color1.getDrawColor();
+        long color2 = CyvClientColorHelper.color2.getDrawColor();
         FontRenderer font = mc.fontRenderer;
 
         drawString("Time: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);

@@ -1,5 +1,8 @@
 package net.cyvforge.config;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
+import net.minecraft.client.Minecraft;
+
 import java.util.ArrayList;
 
 public class CyvClientColorHelper {
@@ -10,22 +13,22 @@ public class CyvClientColorHelper {
 
     static {
         colors = new ArrayList<>();
-        colors.add(new CyvClientColor("dark_red", ChatFormattingString.DARK_RED, 11141120));
-        colors.add(new CyvClientColor("red", ChatFormattingString.RED, 16733525));
-        colors.add(new CyvClientColor("gold", ChatFormattingString.GOLD, 16755200));
-        colors.add(new CyvClientColor("yellow", ChatFormattingString.YELLOW, 16777045));
-        colors.add(new CyvClientColor("dark_green", ChatFormattingString.DARK_GREEN, 43520));
-        colors.add(new CyvClientColor("green", ChatFormattingString.GREEN, 5635925));
-        colors.add(new CyvClientColor("aqua", ChatFormattingString.AQUA, 5636095));
-        colors.add(new CyvClientColor("dark_aqua", ChatFormattingString.DARK_AQUA, 43690));
-        colors.add(new CyvClientColor("dark_blue", ChatFormattingString.DARK_BLUE, 170));
-        colors.add(new CyvClientColor("blue", ChatFormattingString.BLUE, 5592575));
-        colors.add(new CyvClientColor("light_purple", ChatFormattingString.LIGHT_PURPLE, 16733695));
-        colors.add(new CyvClientColor("dark_purple", ChatFormattingString.DARK_PURPLE, 11141290));
-        colors.add(new CyvClientColor("white", ChatFormattingString.WHITE, 16777215));
-        colors.add(new CyvClientColor("gray", ChatFormattingString.GRAY, 11184810));
-        colors.add(new CyvClientColor("dark_gray", ChatFormattingString.DARK_GRAY, 5592405));
-        colors.add(new CyvClientColor("black", ChatFormattingString.BLACK, 0));
+        colors.add(new CyvClientColor("dark_red", ChatFormatting.DARK_RED));
+        colors.add(new CyvClientColor("red", ChatFormatting.RED));
+        colors.add(new CyvClientColor("gold", ChatFormatting.GOLD));
+        colors.add(new CyvClientColor("yellow", ChatFormatting.YELLOW));
+        colors.add(new CyvClientColor("dark_green", ChatFormatting.DARK_GREEN));
+        colors.add(new CyvClientColor("green", ChatFormatting.GREEN));
+        colors.add(new CyvClientColor("aqua", ChatFormatting.AQUA));
+        colors.add(new CyvClientColor("dark_aqua", ChatFormatting.DARK_AQUA));
+        colors.add(new CyvClientColor("dark_blue", ChatFormatting.DARK_BLUE));
+        colors.add(new CyvClientColor("blue", ChatFormatting.BLUE));
+        colors.add(new CyvClientColor("light_purple", ChatFormatting.LIGHT_PURPLE));
+        colors.add(new CyvClientColor("dark_purple", ChatFormatting.DARK_PURPLE));
+        colors.add(new CyvClientColor("white", ChatFormatting.WHITE));
+        colors.add(new CyvClientColor("gray", ChatFormatting.GRAY));
+        colors.add(new CyvClientColor("dark_gray", ChatFormatting.DARK_GRAY));
+        colors.add(new CyvClientColor("black", ChatFormatting.BLACK));
 
         colorStrings = colors.stream().map(c -> c.name).toArray(String[]::new);
 
@@ -68,14 +71,22 @@ public class CyvClientColorHelper {
 
     public static class CyvClientColor {
         public final String name;
-        public final String chatColor;
-        public final long drawColor;
+        public final ChatFormatting formatting;
 
-        CyvClientColor(String name, String chatColor, long drawColor) {
+        CyvClientColor(String name, ChatFormatting formatting) {
             this.name = name;
-            this.chatColor = chatColor;
-            this.drawColor = 0xFF000000L +drawColor;
+            this.formatting = formatting;
         }
+
+        public long getDrawColor() {
+            int color = Minecraft.getMinecraft().fontRenderer.getColorCode(formatting.toString().charAt(1));
+            return color | 0xFF000000;
+        }
+
+        public String getChatFormatting() {
+            return formatting.toString();
+        }
+
     }
 
 }

@@ -51,7 +51,7 @@ public class GuiHUDPositions extends CyvGui {
         final float zBackup = this.zLevel;
         this.zLevel = 200;
 
-        int borderColor = (int) CyvClientColorHelper.color1.drawColor;
+        int borderColor = (int) CyvClientColorHelper.color1.getDrawColor();
         GuiUtils.drawRectOutline(0, 0, this.width - 1, this.height - 1, borderColor); //GUI Border
 
         for (DraggableHUDElement renderer : renderers.keySet()) {
@@ -60,7 +60,7 @@ public class GuiHUDPositions extends CyvGui {
 
             renderer.renderDummy(pos);
 
-            int color = (int) CyvClientColorHelper.color1.drawColor;
+            int color = (int) CyvClientColorHelper.color1.getDrawColor();
             if (!renderer.isVisible) color = 0xFFAAAAAA;
 
             GuiUtils.drawRectOutline(pos.getAbsoluteX(), pos.getAbsoluteY(),

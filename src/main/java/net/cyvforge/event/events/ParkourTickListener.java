@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.storage.WorldInfo;
@@ -81,6 +80,9 @@ public class ParkourTickListener {
     private static int lastSideTime = -1;
     private static int lastSprintTime = -1;
     private static int lastSneakTime = -2;
+    public static int lastRunTime = -1;
+    private static int stopTime = -1;
+    public static int lastStopTime = -1;
 
     private static long earliestMoveTimestamp;
     private static boolean locked = false;
@@ -111,6 +113,14 @@ public class ParkourTickListener {
 
         if (lastTick != null) {
             if ((!lastTick.onGround || !mcPlayer.onGround) && !mcPlayer.capabilities.isFlying) airtime++;
+            if (    mcPlayer.moveForward == 0
+                    && mcPlayer.moveStrafing == 0
+                    && !gameSettings.keyBindJump.isKeyDown()
+                    && !gameSettings.keyBindSneak.isKeyDown()
+                    && stopTime < 999
+            ) {
+                stopTime++;
+            }
 
             x = mcPlayer.posX;
             y = mcPlayer.posY;
@@ -262,6 +272,14 @@ public class ParkourTickListener {
             airtime = 0;
         }
         else lastAirtime = airtime;
+        if (lastTick.forward() != 0 || lastTick.strafe() != 0 || lastTick.keys[4] || lastTick.keys[6]){
+            if (stopTime != 0) {
+                lastStopTime = stopTime;
+            }
+            stopTime = 0;
+        } else {
+            lastStopTime = stopTime;
+        }
 
     }
 
@@ -534,6 +552,7 @@ public class ParkourTickListener {
         if (lastMoveTime > 999) lastMoveTime = 999;
         if (lastSideTime > 999) lastSideTime = 999;
         if (lastSprintTime > 999) lastSprintTime = 999;
+        if (lastGroundMoveTime >= 0 && lastTick.onGround) lastRunTime = lastGroundMoveTime;
     }
 
     public static void resetLastTiming() {

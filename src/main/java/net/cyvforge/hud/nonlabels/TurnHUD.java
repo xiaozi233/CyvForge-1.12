@@ -47,8 +47,8 @@ public class TurnHUD extends DraggableHUDElement {
 
     @Override
     public void render(ScreenPosition pos) {
-        long color1 = CyvClientColorHelper.color1.drawColor;
-        long color2 = CyvClientColorHelper.color2.drawColor;
+        long color1 = CyvClientColorHelper.color1.getDrawColor();
+        long color2 = CyvClientColorHelper.color2.getDrawColor();
         DecimalFormat df = CyvForge.df;
 
         int a = Math.max(1, Math.min(CyvClientConfig.getInt("turnHUDAngleMin", 1), 12));
@@ -66,8 +66,8 @@ public class TurnHUD extends DraggableHUDElement {
     @Override
     public void renderDummy(ScreenPosition pos) {
         if (!this.isVisible) return;
-        long color1 = CyvClientColorHelper.color1.drawColor;
-        long color2 = CyvClientColorHelper.color2.drawColor;
+        long color1 = CyvClientColorHelper.color1.getDrawColor();
+        long color2 = CyvClientColorHelper.color2.getDrawColor();
         int a = Math.max(1, Math.min(CyvClientConfig.getInt("turnHUDAngleMin", 12), 12));
         int b = Math.max(1, Math.min(CyvClientConfig.getInt("turnHUDAngleMax", 12), 12));
 
