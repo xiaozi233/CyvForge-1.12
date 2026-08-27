@@ -25,7 +25,8 @@ public class CommandInitializer  {
 
         cyvCommands.addAll(Arrays.asList(//config commands
                 new CommandHelp(), new CommandColor1(), new CommandColor2(), new CommandColors(), new CommandDf(),
-                new CommandConfig(), new CommandGui(), new CommandInertia(), new CommandPositionChecker()
+                new CommandConfig(), new CommandGui(), new CommandInertia(), new CommandPositionChecker(),
+                new CommandResetGui()
         ));
 
         cyvCommands.addAll(Arrays.asList(//config commands
@@ -35,11 +36,13 @@ public class CommandInitializer  {
 
         cyvCommands.addAll(Arrays.asList(//mm commands
                 new CommandAirtime(), new CommandCalculate(), new CommandDistance(), new CommandHeight(),
-                new CommandSimulate(), new CommandSetSensitivity(), new CommandOptimizeSensitivity(), new CommandSimulate(),
-                new CommandCheckpoint(), new CommandGiveCheckpointGenerator()
+                new CommandSimulate(), new CommandSetSensitivity(), new CommandOptimizeSensitivity(), new CommandCheckpoint(),
+                new CommandGiveCheckpointGenerator()
         ));
 
         cyvCommands.add(new CommandMacro());
+
+        cyvCommands.add(new CommandFullbright());
 
         ClientCommandHandler.instance.registerCommand(new DefaultCommand());
     }

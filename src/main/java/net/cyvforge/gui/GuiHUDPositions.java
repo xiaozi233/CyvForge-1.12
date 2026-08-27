@@ -1,6 +1,7 @@
 package net.cyvforge.gui;
 
 import net.cyvforge.config.CyvClientColorHelper;
+import net.cyvforge.config.CyvClientConfig;
 import net.cyvforge.hud.HUDManager;
 import net.cyvforge.hud.structure.DraggableHUDElement;
 import net.cyvforge.hud.structure.IRenderer;
@@ -8,6 +9,7 @@ import net.cyvforge.hud.structure.ScreenPosition;
 import net.cyvforge.util.defaults.CyvGui;
 import net.cyvforge.util.GuiUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
@@ -23,12 +25,16 @@ public class GuiHUDPositions extends CyvGui {
     protected int prevX;
     protected int prevY;
     protected final boolean fromLabels;
+    protected boolean fromPresets = false;
 
-    public GuiHUDPositions(boolean fromLabels) {
+    protected boolean isResizing = false;
+    private final int handleSize = 6;
+
+    public GuiHUDPositions(boolean fromLabels, boolean fromPresets) {
         super("HUD Position");
         Collection<DraggableHUDElement> registeredRenderers = HUDManager.registeredRenderers;
         this.fromLabels = fromLabels;
-        //Keyboard.enableRepeatEvents(true);
+        this.fromPresets = fromPresets;
 
         for (DraggableHUDElement renderer : registeredRenderers) {
             if (!renderer.isEnabled) continue;
@@ -41,7 +47,6 @@ public class GuiHUDPositions extends CyvGui {
             adjustBounds(renderer, pos);
             this.renderers.put(renderer, pos);
         }
-
     }
 
     @Override
@@ -55,6 +60,8 @@ public class GuiHUDPositions extends CyvGui {
         GuiUtils.drawRectOutline(0, 0, this.width - 1, this.height - 1, borderColor); //GUI Border
 
         for (DraggableHUDElement renderer : renderers.keySet()) {
+            if (renderer.getWidth() <= 0 || renderer.getHeight() <= 0) continue;
+
             ScreenPosition pos = renderers.get(renderer);
             if (!renderer.isDraggable) pos = renderer.getDefaultPosition();
 
@@ -65,10 +72,15 @@ public class GuiHUDPositions extends CyvGui {
 
             GuiUtils.drawRectOutline(pos.getAbsoluteX(), pos.getAbsoluteY(),
                     pos.getAbsoluteX()+renderer.getWidth(), pos.getAbsoluteY()+renderer.getHeight(), color);
+
+            if (selectedRenderer.isPresent() && selectedRenderer.get() == renderer && renderer.getName().equals("keystrokes")) {
+                int handleX = pos.getAbsoluteX() + renderer.getWidth() - handleSize;
+                int handleY = pos.getAbsoluteY() + renderer.getHeight() - handleSize;
+                Gui.drawRect(handleX, handleY, handleX + handleSize, handleY + handleSize, 0xFFFFFFFF);
+            }
         }
 
         this.zLevel = zBackup;
-
     }
 
     @Override
@@ -78,8 +90,13 @@ public class GuiHUDPositions extends CyvGui {
                 entry.getKey().save(entry.getValue());
             });
 
-            if (fromLabels) Minecraft.getMinecraft().displayGuiScreen(new GuiMPK());
-            else Minecraft.getMinecraft().displayGuiScreen(null);
+            if (fromPresets) {
+                Minecraft.getMinecraft().displayGuiScreen(new GuiPresets());
+            } else if (fromLabels) {
+                Minecraft.getMinecraft().displayGuiScreen(new GuiMPK());
+            } else {
+                Minecraft.getMinecraft().displayGuiScreen(null);
+            }
             return;
         } else if (keyCode == Keyboard.KEY_UP) {
             if (selectedRenderer.isPresent()) {
@@ -110,13 +127,25 @@ public class GuiHUDPositions extends CyvGui {
                 }
             }
         }
-
     }
 
     @Override
     public void mouseClickMove(int x, int y, int mouseButton, long time) {
         if (mouseButton == 0) { //left-clicked
-            if (selectedRenderer.isPresent()) {
+            if (isResizing && selectedRenderer.isPresent()) {
+                DraggableHUDElement renderer = selectedRenderer.get();
+                ScreenPosition pos = renderers.get(renderer);
+
+                int newWidth = x - pos.getAbsoluteX() + (handleSize / 2);
+
+                int finalSize = Math.max(40, Math.min(250, newWidth));
+
+                if (finalSize != CyvClientConfig.getInt("keystrokesSize", 66)) {
+                    CyvClientConfig.set("keystrokesSize", finalSize);
+                }
+            } else if (selectedRenderer.isPresent()) {
+                if (!selectedRenderer.get().isDraggable) return;
+
                 moveSelectedRenderBy(x - prevX, y - prevY);
             }
             this.prevX = x; this.prevY = y;
@@ -128,9 +157,23 @@ public class GuiHUDPositions extends CyvGui {
         this.prevX = x;
         this.prevY = y;
 
-        loadMouseOver(x, y);
+        if (mouseButton == 0) { //left-clicked
+            if (selectedRenderer.isPresent() && selectedRenderer.get().getName().equals("keystrokes")) {
+                ScreenPosition pos = renderers.get(selectedRenderer.get());
+                int handleX = pos.getAbsoluteX() + selectedRenderer.get().getWidth() - handleSize;
+                int handleY = pos.getAbsoluteY() + selectedRenderer.get().getHeight() - handleSize;
+
+                if (x >= handleX && x <= handleX + handleSize && y >= handleY && y <= handleY + handleSize) {
+                    this.isResizing = true;
+                    return;
+                }
+            }
+            this.isResizing = false;
+            loadMouseOver(x, y);
+        }
 
         if (mouseButton == 1) { //right-clicked
+            loadMouseOver(x, y);
             if (!this.selectedRenderer.isPresent()) return;
             DraggableHUDElement modRender = this.selectedRenderer.get();
             modRender.isVisible = !modRender.isVisible;
@@ -142,6 +185,7 @@ public class GuiHUDPositions extends CyvGui {
     }
 
     private void moveSelectedRenderBy(int offsetX, int offsetY) {
+        if (!selectedRenderer.isPresent()) return;
         IRenderer renderer = selectedRenderer.get();
         ScreenPosition pos = renderers.get(renderer);
 
@@ -187,8 +231,6 @@ public class GuiHUDPositions extends CyvGui {
             }
 
             return false;
-
         }
     }
-
 }

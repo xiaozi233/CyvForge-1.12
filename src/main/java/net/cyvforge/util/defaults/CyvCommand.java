@@ -28,5 +28,7 @@ public class CyvCommand {
         return helpString;
     }
 
-
+    public java.util.List<String> getTabCompletions(String[] args) {
+        return new java.util.ArrayList<>();
+    }
 }

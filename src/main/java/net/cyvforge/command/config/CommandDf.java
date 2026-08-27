@@ -14,9 +14,9 @@ public class CommandDf extends CyvCommand {
         this.usage = "[precision]";
         this.helpString = "Set the decimal precision of the mod from 0-16.";
 
-        aliases.add("decimalprecision");
-        aliases.add("precision");
-        aliases.add("decimals");
+        this.aliases.add("decimalprecision");
+        this.aliases.add("precision");
+        this.aliases.add("decimals");
     }
 
     @Override

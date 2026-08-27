@@ -21,24 +21,29 @@ public class LandingBlockOffset {
         sendChatOffset = false;
     }
 
-    public static void check(double x, double y, double z, double lastx, double lasty, double lastz, LandingBlock b, int i) {
+    public static void check(double x, double y, double z, double lastx, double lasty, double lastz, double nextX, double nextY, double nextZ, LandingBlock b, int i) {
         Double xOffset = null, zOffset = null;
         Double eventX = null, eventZ = null;
 
-        if (y < b.bb[i].minY) return; //below bottom y
-        else if (y < b.bb[i].maxY && b.mode.equals(LandingMode.enter)) { //inside block on y
+        boolean isForcedTick = (b.targetTick != -1);
+
+        if (!b.isLiquid && !isForcedTick && y < b.bb[i].minY) return; //below bottom y
+        else if (!b.isLiquid && !isForcedTick && y < b.bb[i].maxY && b.mode.equals(LandingMode.enter)) { //inside block on y
             xOffset = checkX(x, b, i);
             zOffset = checkZ(z, b, i);
             eventX = x;
             eventZ = z;
-        } else if (y <= b.bb[i].maxY && b.mode.equals(LandingMode.hit) && lasty >= b.bb[i].maxY) { //hit tick
+        } else if (b.mode.equals(LandingMode.hit) && (b.isLiquid || isForcedTick || (y <= b.bb[i].maxY && lasty >= b.bb[i].maxY))) { //hit tick
             xOffset = checkX(x, b, i);
             zOffset = checkZ(z, b, i);
             eventX = x;
             eventZ = z;
-        } else if (y >= b.bb[i].maxY && (b.mode.equals(LandingMode.z_neo) || b.mode.equals(LandingMode.landing))) {
+        } else if (b.isLiquid || isForcedTick || (y >= b.bb[i].maxY && (b.mode.equals(LandingMode.z_neo) || b.mode.equals(LandingMode.x_neo) || b.mode.equals(LandingMode.landing)))) {
             xOffset = checkX(x, b, i);
             eventX = x;
+            zOffset = checkZ(z, b, i);
+            eventZ = z;
+
             if (b.mode.equals(LandingMode.z_neo)) {
                 zOffset = checkZ(lastz, b, i);
                 eventZ = lastz;
@@ -48,17 +53,18 @@ public class LandingBlockOffset {
                     zOffset = temp < zOffset ? temp : zOffset;
                     eventZ = z;
                 }
-
-            } else {
-                zOffset = checkZ(z, b, i);
-                eventZ = z;
+            }
+            else if (b.mode.equals(LandingMode.x_neo)) {
+                xOffset = checkX(nextX, b, i);
+                eventX = nextX;
             }
 
         }
 
-        //conditions
-        if (eventX == null || eventZ == null || !(eventX <= b.xMaxCond && eventX >= b.xMinCond &&
-                eventZ <= b.zMaxCond && eventZ >= b.zMinCond)) return;
+        if (!isForcedTick) {
+            if (eventX == null || eventZ == null || !(eventX <= b.xMaxCond && eventX >= b.xMinCond &&
+                    eventZ <= b.zMaxCond && eventZ >= b.zMinCond)) return;
+        }
 
         //finalize x and z offset
         AxisAlignedBB playerBB = Minecraft.getMinecraft().player.getEntityBoundingBox();
@@ -158,7 +164,7 @@ public class LandingBlockOffset {
                         && System.currentTimeMillis() - b.lastLandingTime <
                         ModManager.getMod(ModAntiCP.class).delay*1000)) { //[CyvClient] fix slime issue
                     b.lastLandingTime = System.currentTimeMillis();
-                    b.lastLandingHotbarSlot = Minecraft.getMinecraft().thePlayer.inventory.currentItem;
+                    b.lastLandingHotbarSlot = Minecraft.getMinecraft().player.inventory.currentItem;
 
                 }
                 b.sentMessage = false;
@@ -173,6 +179,9 @@ public class LandingBlockOffset {
                 DecimalFormat df = CyvForge.df;
                 CyvForge.sendChatMessage("New pb! " + df.format(b.pb.doubleValue()));
 
+                if (b.pb >= 0) {
+                    net.cyvforge.event.events.ParkourTickListener.triggerAntiCP();
+                }
             }
         }
 

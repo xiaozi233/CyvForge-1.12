@@ -93,6 +93,13 @@ public class CommandHelp extends CyvCommand {
          }
      }
 
-
+    @Override
+    public List<String> getTabCompletions(String[] args) {
+        List<String> allNames = new ArrayList<>();
+        for (CyvCommand c : CommandInitializer.cyvCommands) {
+            allNames.add(c.name);
+        }
+        return allNames;
+    }
 
 }

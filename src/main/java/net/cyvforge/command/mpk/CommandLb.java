@@ -10,9 +10,10 @@ import net.minecraft.command.ICommandSender;
 public class CommandLb extends CyvCommand {
     public CommandLb() {
         super("lb");
-        aliases.add("landingblock");
-        aliases.add("landing");
         this.helpString = "Open GUI for modifying landing block settings.";
+
+        this.aliases.add("landingblock");
+        this.aliases.add("landing");
     }
 
     @Override

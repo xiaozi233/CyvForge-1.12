@@ -18,8 +18,8 @@ import java.util.List;
 public class CommandSetlb extends CyvCommand {
     public CommandSetlb() {
         super("setlb");
-        hasArgs = true;
-        usage = "[arguments]";
+        this.hasArgs = true;
+        this.usage = "[arguments]";
         this.helpString = "Set landing block";
     }
 
@@ -37,16 +37,29 @@ public class CommandSetlb extends CyvCommand {
             LandingAxis axis = LandingAxis.both;
             boolean box = false;
             boolean target = false;
+            int targetTick = -1;
             for (String s : args) {
                 s = s.toLowerCase();
                 if (s.equals("x")) axis = LandingAxis.x;
                 else if (s.equals("z")) axis = LandingAxis.z;
                 else if (s.equals("land") || s.equals("landing")) mode = LandingMode.landing;
                 else if (s.equals("hit")) mode = LandingMode.hit;
-                else if (s.equals("zneo") || s.equals("z-neo") || s.equals("neo") || s.equals("z_neo")) mode = LandingMode.z_neo;
+                else if (s.equals("xneo") || s.equals("x-neo") || s.equals("neo-x") || s.equals("x_neo") || s.equals("neox")) mode = LandingMode.x_neo;
+                else if (s.equals("zneo") || s.equals("z-neo") || s.equals("neo-z") || s.equals("neo") || s.equals("z_neo") || s.equals("neoz")) mode = LandingMode.z_neo;
                 else if (s.equals("enter")) mode = LandingMode.enter;
                 else if (s.equals("box")) box = true;
                 else if (s.equals("target")) target = true;
+                //shortcuts
+                else if (s.equals("slime") || s.equals("ice") || s.equals("slime/ice")) { box = true; mode = LandingMode.hit; }
+                else if (s.equals("ladder") || s.equals("vine") || s.equals("ladder/vine") ) { box = true; mode = LandingMode.enter; }
+
+                if (s.startsWith("tick") || s.startsWith("tier")) {
+                    try {
+                        targetTick = Integer.parseInt(s.substring(4));
+                    } catch (Exception e) {
+                        CyvForge.sendChatMessage("Invalid tick format. Use e.g. tick5 or tier5");
+                    }
+                }
             }
 
             if (target) {
@@ -56,7 +69,12 @@ public class CommandSetlb extends CyvCommand {
                         BlockPos pos = hit.getBlockPos();
                         List<AxisAlignedBB> list = CyvForge.getHitbox(pos, mc.world);
 
-                        if (list != null && list.isEmpty()) {
+                        net.minecraft.block.Block block = mc.world.getBlockState(pos).getBlock();
+
+                        boolean isLiquid = block instanceof net.minecraft.block.BlockLiquid;
+                        boolean isPassable = block instanceof net.minecraft.block.BlockLadder || block instanceof net.minecraft.block.BlockVine;
+
+                        if (list != null && list.isEmpty() && !isLiquid && !isPassable) {
                             CyvForge.sendChatMessage("Please look at a valid block.");
                         } else {
                             ParkourTickListener.landingBlock = new LandingBlock(pos, mode, axis, box);
@@ -74,12 +92,15 @@ public class CommandSetlb extends CyvCommand {
                     BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);
                     List<AxisAlignedBB> list = CyvForge.getHitbox(pos, mc.world);
 
-                    if (list != null && list.isEmpty()) {
+                        net.minecraft.block.Block block = mc.world.getBlockState(pos).getBlock();
+                        boolean isPassable = block instanceof net.minecraft.block.BlockLadder || block instanceof net.minecraft.block.BlockVine;
+
+                    if (list != null && list.isEmpty() && !isPassable) {
                         pos = pos.down();
                         list = CyvForge.getHitbox(pos, mc.world);
                     }
 
-                    if (list != null && list.isEmpty()) {
+                    if (list != null && list.isEmpty() && !isPassable) {
                         CyvForge.sendChatMessage("Please stand on a valid block.");
                     } else {
                         ParkourTickListener.landingBlock = new LandingBlock(pos, mode, axis, box);
@@ -90,6 +111,13 @@ public class CommandSetlb extends CyvCommand {
                     CyvForge.sendChatMessage("Please stand on a valid block.");
                 }
             }
+            ParkourTickListener.landingBlock.targetTick = targetTick;
+            if (targetTick != -1) CyvForge.sendChatMessage("Target tick/tier set to: " + targetTick);
         }, "Set landing block").start();
+    }
+
+    @Override
+    public List<String> getTabCompletions(String[] args) {
+        return java.util.Arrays.asList("target", "box", "hit", "enter", "x", "z", "zneo", "xneo", "tick", "ladder/vine", "slime/ice");
     }
 }

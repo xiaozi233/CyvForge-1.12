@@ -13,6 +13,15 @@ public class MacroFileInit {
 
     public static File macroFile;
 
+    //get next possible file name
+    public static String getNextAvailableName(String prefix) {
+        int i = 1;
+        while (new File(PATH + prefix + i + ".json").exists()) {
+            i++;
+        }
+        return prefix + i;
+    }
+
     //initialises file
     public static void setupFile(String name) {
         File dir = new File(PATH);

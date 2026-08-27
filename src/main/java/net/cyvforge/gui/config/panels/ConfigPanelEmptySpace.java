@@ -1,7 +1,7 @@
 package net.cyvforge.gui.config.panels;
 
-import net.cyvforge.gui.GuiModConfig;
 import net.cyvforge.gui.config.ConfigPanel;
+import net.cyvforge.util.defaults.CyvGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -9,23 +9,30 @@ import java.util.ArrayList;
 
 public class ConfigPanelEmptySpace implements ConfigPanel {
     public final int index;
-    public GuiModConfig screenIn;
+    public CyvGui screenIn;
 
-    private final int xPosition;
-    private final int yPosition;
-    private final int sizeX;
-    private final int sizeY;
+    private int xPosition;
+    private int yPosition;
+    private int sizeX;
+    private int sizeY;
 
-    public ConfigPanelEmptySpace(ArrayList<ConfigPanel> array, GuiModConfig screenIn) {
+    public ConfigPanelEmptySpace(ArrayList<ConfigPanel> array, CyvGui screenIn) {
         this.index = array.size();
         this.screenIn = screenIn;
 
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-        sizeX = screenIn.sizeX-20;
+        sizeX = screenIn.getSizeX()-20;
         sizeY = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT*3/2;
-        this.xPosition = sr.getScaledWidth()/2-screenIn.sizeX/2+10;
-        this.yPosition = sr.getScaledHeight()/2-screenIn.sizeY/2+10 + (index * Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT * 2);
+        this.xPosition = sr.getScaledWidth()/2-screenIn.getSizeX()/2+10;
+        this.yPosition = sr.getScaledHeight()/2-screenIn.getSizeY()/2+10 + (index * Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT * 2);
 
+    }
+
+    @Override
+    public void setPos(int x, int y, int width) {
+        this.xPosition = x;
+        this.yPosition = y;
+        this.sizeX = width;
     }
 
     @Override

@@ -4,14 +4,14 @@ import net.cyvforge.CyvForge;
 import net.cyvforge.config.ColorTheme;
 import net.cyvforge.config.CyvClientColorHelper;
 import net.cyvforge.config.CyvClientConfig;
+import net.cyvforge.event.events.GuiHandler;
 import net.cyvforge.gui.config.ConfigPanel;
-import net.cyvforge.gui.config.panels.*;
+import net.cyvforge.util.PanelUtils;
 import net.cyvforge.util.defaults.CyvGui;
 import net.cyvforge.util.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -122,70 +122,76 @@ public class GuiModConfig extends CyvGui {
 
     private void updatePanels() {
         this.panels.clear();
-        this.scroll = 0;
 
         // globals
-        panels.add(new ConfigPanelOptionSwitcher<String>(panels, "color1", "Color 1", CyvClientColorHelper.colorStrings, this) {
-            public void onValueChange() {CyvClientColorHelper.setColor1(CyvClientConfig.getString("color1", "aqua"));}});
-        panels.add(new ConfigPanelOptionSwitcher<String>(panels, "color2", "Color 2", CyvClientColorHelper.colorStrings, this){
-            public void onValueChange() {CyvClientColorHelper.setColor2(CyvClientConfig.getString("color2", "aqua"));}});
-        panels.add(new ConfigPanelOptionSwitcher<String>(panels, "theme", "Color Theme", ColorTheme.getThemes(), this) {
-            public void onValueChange() {
-                CyvForge.theme = ColorTheme.valueOf(CyvClientConfig.getString("theme", "CYVISPIRIA"));}
+        PanelUtils.addSwitcher(panels, "color1", "Color 1", CyvClientColorHelper.colorStrings, this, () -> {
+            CyvClientColorHelper.setColor1(CyvClientConfig.getString("color1", "aqua"));
         });
-        panels.add(new ConfigPanelToggle(panels, "whiteChat", "Color2 always white in chat", this));
-        panels.add(new ConfigPanelIntegerSlider(panels, "df", "Decimal Precision", 1, 16, this) {
-            public void onValueChange() {
-                CyvForge.df.setMaximumFractionDigits(CyvClientConfig.getInt("df", 5));}});
-        panels.add(new ConfigPanelToggle(panels, "trimZeroes", "Trim Zeroes", this) {
-            public void onValueChange() {
-                if (CyvClientConfig.getBoolean("trimZeroes", true)) CyvForge.df.setMinimumFractionDigits(0);
-                else CyvForge.df.setMinimumFractionDigits(CyvClientConfig.getInt("df",5));
-        }});
-        panels.add(new ConfigPanelEmptySpace(panels, this));
+        PanelUtils.addSwitcher(panels, "color2", "Color 2", CyvClientColorHelper.colorStrings, this, () -> {
+            CyvClientColorHelper.setColor2(CyvClientConfig.getString("color2", "aqua"));
+        });
+        PanelUtils.addSwitcher(panels, "theme", "Color Theme", ColorTheme.getThemes(), this, () -> {
+            CyvForge.theme = ColorTheme.valueOf(CyvClientConfig.getString("theme", "CYVISPIRIA"));
+        });
+        PanelUtils.addString(panels, "chatPrefix", "Chat Prefix", this);
+        PanelUtils.addToggle(panels, "whiteChat", "Color2 always white in chat", this);
+        PanelUtils.addSlider(panels, "df", "Decimal Precision", 1, 16, this, () -> {
+            CyvForge.df.setMaximumFractionDigits(CyvClientConfig.getInt("df", 5));
+        });
+        PanelUtils.addToggle(panels, "trimZeroes", "Trim Zeroes", this, () -> {
+            if (CyvClientConfig.getBoolean("trimZeroes", true)) {
+                CyvForge.df.setMinimumFractionDigits(0);
+            } else {
+                CyvForge.df.setMinimumFractionDigits(CyvClientConfig.getInt("df", 5));
+            }
+        });
 
         // mpk
-        panels.add(new ConfigPanelToggle(panels, "showMilliseconds", "Show Millisecond Timings", this));
-        panels.add(new ConfigPanelToggle(panels, "sendLbChatOffset", "Send Landing Offset", this));
-        panels.add(new ConfigPanelToggle(panels, "sendMmChatOffset", "Send Momentum Offset", this));
-        panels.add(new ConfigPanelToggle(panels, "highlightLanding", "Highlight Landing Blocks", this));
-        panels.add(new ConfigPanelToggle(panels, "highlightLandingCond", "Highlight Landing Conditions", this));
-        panels.add(new ConfigPanelToggle(panels, "momentumPbCancelling", "Momentum PB Cancelling", this));
-        panels.add(new ConfigPanelToggle(panels, "invfmm", "Inv Fmm", this));
-        panels.add(new ConfigPanelEmptySpace(panels, this));
-
-        // label specific
-        panels.add(new ConfigPanelToggle(panels, "showFacingAxis", "Show Facing Axis", this));
-        panels.add(new ConfigPanelIntegerSlider(panels, "turnHUDAngleMin", "Turn HUD Angle Min", 1, 12, this));
-        panels.add(new ConfigPanelIntegerSlider(panels, "turnHUDAngleMax", "Turn HUD Angle Max", 1, 12, this));
-
+        PanelUtils.addSpace(panels, this);
+        PanelUtils.addToggle(panels, "sendLbChatOffset", "Send Landing Offset", this);
+        PanelUtils.addToggle(panels, "sendMmChatOffset", "Send Momentum Offset", this);
+        PanelUtils.addToggle(panels, "highlightLanding", "Highlight Landing Blocks", this);
+        PanelUtils.addToggle(panels, "highlightLandingCond", "Highlight Landing Conditions", this);
+        PanelUtils.addToggle(panels, "momentumPbCancelling", "Momentum PB Cancelling", this);
+        PanelUtils.addToggle(panels, "invFmm", "Inv Fmm", this);
         // macro
-        panels.add(new ConfigPanelEmptySpace(panels, this));
-        panels.add(new ConfigPanelToggle(panels, "smoothMacro", "Smooth Macro", this));
+        PanelUtils.addSpace(panels, this);
+        PanelUtils.addToggle(panels, "smoothMacro", "Smooth Macro", this);
+        PanelUtils.addSwitcher(panels, "macroHUDColor", "Macro HUD Color", new String[] {"Default", "Color1", "Color2"}, this);
+        PanelUtils.addToggle(panels, "macroClipEnabled", "Macro Clip", this);
+        PanelUtils.addDependantSlider(panels, "macroClipTicks", "Number of ticks to clip", 1, 500, "macroClipEnabled", this);
 
         // inertia
-        panels.add(new ConfigPanelToggle(panels, "inertiaEnabled", "Inertia Listener Enabled", this));
-        panels.add(new ConfigPanelIntegerSlider(panels, "inertiaTick", "Air tick", 1, 12, this));
-        panels.add(new ConfigPanelDecimalEntry(panels, "inertiaMin", "Min Speed", this));
-        panels.add(new ConfigPanelDecimalEntry(panels, "inertiaMax", "Max Speed", this));
-        panels.add(new ConfigPanelOptionSwitcher<>(panels, "inertiaAxis", "Inertia Axis", new Character[] {'x', 'z'}, this));
-        panels.add(new ConfigPanelOptionSwitcher<>(panels, "inertiaGroundType", "Ground Type", new String[] {"normal", "ice", "slime"}, this));
+        PanelUtils.addSpace(panels, this);
+        PanelUtils.addToggle(panels, "inertiaEnabled", "Inertia Listener Enabled", this);
+        PanelUtils.addDependantSlider(panels, "inertiaTick", "Air tick", 1, 12, "inertiaEnabled", this);
+        PanelUtils.addDependantDecimal(panels, "inertiaMin", "Min Speed", "inertiaEnabled", this);
+        PanelUtils.addDependantDecimal(panels, "inertiaMax", "Max Speed", "inertiaEnabled", this);
+        PanelUtils.addDependantSwitcher(panels, "inertiaAxis", "Inertia Axis", new Character[] {'x', 'z'}, "inertiaEnabled", this);
+        PanelUtils.addDependantSwitcher(panels, "inertiaGroundType", "Ground Type", new String[] {"normal", "ice", "slime"}, "inertiaEnabled", this);
 
         // position checker
-        panels.add(new ConfigPanelEmptySpace(panels, this));
-        panels.add(new ConfigPanelToggle(panels, "positionCheckerEnabled", "Position Checker Enabled", this));
-        panels.add(new ConfigPanelIntegerSlider(panels, "positionCheckerTick", "Air tick", 1, 12, this));
-        panels.add(new ConfigPanelDecimalEntry(panels, "positionCheckerMinX", "Min X", this));
-        panels.add(new ConfigPanelDecimalEntry(panels, "positionCheckerMaxX", "Max X", this));
-        panels.add(new ConfigPanelDecimalEntry(panels, "positionCheckerMinZ", "Min Z", this));
-        panels.add(new ConfigPanelDecimalEntry(panels, "positionCheckerMaxZ", "Max Z", this));
-        panels.add(new ConfigPanelToggle(panels, "positionCheckerZNeo", "Z Neo Mode", this));
+        PanelUtils.addSpace(panels, this);
+        PanelUtils.addToggle(panels, "positionCheckerEnabled", "Position Checker Enabled", this);
+        PanelUtils.addDependantSlider(panels, "positionCheckerTick", "Air tick", 1, 12, "positionCheckerEnabled", this);
+        PanelUtils.addDependantDecimal(panels, "positionCheckerRadius", "Radius", "positionCheckerEnabled", this);
+        PanelUtils.addDependantAction(panels, "Copy current position with radius", () -> {
+            net.cyvforge.command.CommandPositionChecker.setMark();
+            this.updatePanels();
+        }, "positionCheckerEnabled", this) ;
+        PanelUtils.addDependantDecimal(panels, "positionCheckerMinX", "Min X", "positionCheckerEnabled", this);
+        PanelUtils.addDependantDecimal(panels, "positionCheckerMaxX", "Max X", "positionCheckerEnabled", this);
+        PanelUtils.addDependantDecimal(panels, "positionCheckerMinZ", "Min Z", "positionCheckerEnabled", this);
+        PanelUtils.addDependantDecimal(panels, "positionCheckerMaxZ", "Max Z", "positionCheckerEnabled", this);
+        PanelUtils.addDependantToggle(panels, "positionCheckerZNeo", "Z Neo Mode", "positionCheckerEnabled", this);
 
         // checkpoints
-        panels.add(new ConfigPanelEmptySpace(panels, this));
-        panels.add(new ConfigPanelToggle(panels, "singleplayerCheckpointsEnabled", "Custom Checkpoints Enabled", this));
-        panels.add(new ConfigPanelIntegerSlider(panels, "generatorDyeColor", "Generator Dye Color", 0, 15, this));
-        panels.add(new ConfigPanelIntegerSlider(panels, "generatorItemSlot", "Generator Hotbar Slot", 0, 8, this));
+        PanelUtils.addSpace(panels, this);
+        PanelUtils.addToggle(panels, "antiCP", "Anti-Checkpoint", this);
+        PanelUtils.addDependantSlider(panels, "antiCPDelay", "Anti-CP Delay (s)", 1, 10, "antiCP", this);
+        PanelUtils.addToggle(panels, "singleplayerCheckpointsEnabled", "Custom Checkpoints Enabled", this);
+        PanelUtils.addSlider(panels, "generatorDyeColor", "Generator Dye Color", 0, 15, this);
+        PanelUtils.addSlider(panels, "generatorItemSlot", "Generator Hotbar Slot", 0, 8, this);
 
         maxScroll = (int) Math.max(0, fontRenderer.FONT_HEIGHT * 2 * Math.ceil(panels.size()) - (sizeY-20));
         if (scroll > maxScroll) scroll = maxScroll;
@@ -214,15 +220,16 @@ public class GuiModConfig extends CyvGui {
 
     @Override
     public void handleMouseInput() {
+        int eventDWheel = GuiHandler.scrollBuffer;
+        GuiHandler.scrollBuffer = 0;
+
+        if (eventDWheel != 0 && (!scrollClicked || !org.lwjgl.input.Mouse.isButtonDown(0))) {
+            vScroll -= eventDWheel * 0.05;
+        }
+
         try {
             super.handleMouseInput();
         } catch (IOException e) {}
-
-        int eventDWheel = Mouse.getDWheel();
-
-        if ((!scrollClicked || !Mouse.isButtonDown(0)) && eventDWheel != 0) {
-            vScroll -= eventDWheel * 0.03;
-        }
     }
 
     @Override
@@ -241,6 +248,8 @@ public class GuiModConfig extends CyvGui {
         }
 
         if (this.backButton.clicked(mouseX, mouseY, mouseButton)) {
+            if (this.selectedPanel != null) this.selectedPanel.unselect();
+
             if (fromLabels) Minecraft.getMinecraft().displayGuiScreen(new GuiMPK());
             else Minecraft.getMinecraft().displayGuiScreen(null);
             return;
@@ -248,13 +257,15 @@ public class GuiModConfig extends CyvGui {
 
         if (mouseX < sr.getScaledWidth()/2-sizeX/2-4 || mouseX > sr.getScaledWidth()/2+sizeX/2+14 ||
                 mouseY < sr.getScaledHeight()/2-sizeY/2-4 || mouseY > sr.getScaledHeight()/2+sizeY/2+4) {
+            if (this.selectedPanel != null) this.selectedPanel.unselect();
+
             this.selectedPanel = null;
             return;
         }
 
         for (ConfigPanel p : this.panels) {
-            if (p.mouseInBounds(mouseX, mouseY+(int)scroll)) {
-                if (this.selectedPanel != null) this.selectedPanel.unselect();
+            if (p.isEnabled() && p.mouseInBounds(mouseX, mouseY+(int)scroll)) {
+                if (this.selectedPanel != null && this.selectedPanel != p) this.selectedPanel.unselect();
 
                 p.mouseClicked(mouseX, mouseY+(int)scroll, mouseButton);
                 this.selectedPanel = p;
@@ -263,6 +274,9 @@ public class GuiModConfig extends CyvGui {
             }
         }
 
+        if (this.selectedPanel != null) {
+            this.selectedPanel.unselect();
+        }
         this.selectedPanel = null;
     }
 
@@ -307,4 +321,7 @@ public class GuiModConfig extends CyvGui {
         }
 
     }
+
+    @Override public int getSizeX() { return this.sizeX; }
+    @Override public int getSizeY() { return this.sizeY; }
 }

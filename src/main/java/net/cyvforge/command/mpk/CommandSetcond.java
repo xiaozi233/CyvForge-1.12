@@ -8,6 +8,8 @@ import net.minecraft.command.ICommandSender;
 public class CommandSetcond extends CyvCommand {
     public CommandSetcond() {
         super("setcond");
+        this.hasArgs = true;
+        this.usage = "<x1> <x2> <z1> <z2>";
         this.helpString = "Set landing block detection zone.";
     }
 

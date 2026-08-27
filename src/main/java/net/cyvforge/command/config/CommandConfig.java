@@ -10,8 +10,8 @@ public class CommandConfig extends CyvCommand {
         super("config");
         this.helpString = "Opens the mod config GUI.";
 
-        aliases.add("configuration");
-        aliases.add("settings");
+        this.aliases.add("configuration");
+        this.aliases.add("settings");
     }
 
     @Override

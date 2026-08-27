@@ -9,6 +9,7 @@ import net.cyvforge.command.mpk.CommandMacro;
 import net.cyvforge.config.ColorTheme;
 import net.cyvforge.config.CyvClientConfig;
 import net.cyvforge.event.MacroFileInit;
+import net.cyvforge.event.events.GuiHandler;
 import net.cyvforge.util.defaults.CyvGui;
 import net.cyvforge.util.GuiUtils;
 import net.minecraft.client.Minecraft;
@@ -95,9 +96,19 @@ public class GuiMacro extends CyvGui {
                         macroLine.sprint = Boolean.parseBoolean(line.get(5));
                         macroLine.sneak = Boolean.parseBoolean(line.get(6));
 
-                        macroLine.yawField.setText(""+Double.valueOf(line.get(7)));
-                        macroLine.pitchField.setText(""+Double.valueOf(line.get(8)));
+                        //macroLine.yawField.setText(""+Double.valueOf(line.get(8)));
+                        //macroLine.pitchField.setText(""+Double.valueOf(line.get(9)));
 
+                        // transisition fix for when i added RMB
+                        if (line.size() == 9) {
+                            macroLine.rmb = false;
+                            macroLine.yawField.setText("" + Double.valueOf(line.get(7)));
+                            macroLine.pitchField.setText("" + Double.valueOf(line.get(8)));
+                        } else {
+                            macroLine.rmb = Boolean.valueOf(line.get(7));
+                            macroLine.yawField.setText("" + Double.valueOf(line.get(8)));
+                            macroLine.pitchField.setText("" + Double.valueOf(line.get(9)));
+                        }
 
                         macroLines.add(macroLine);
 
@@ -191,12 +202,14 @@ public class GuiMacro extends CyvGui {
 
     @Override
     public void handleMouseInput() throws IOException {
-        super.handleMouseInput();
+        int eventDWheel = GuiHandler.scrollBuffer;
+        GuiHandler.scrollBuffer = 0;
 
-        int eventDWheel = Mouse.getDWheel();
-        if ((!scrollClicked || !Mouse.isButtonDown(0)) && eventDWheel != 0) {
-            vScroll -= eventDWheel * 0.03;
+        if (eventDWheel != 0 && (!scrollClicked || !org.lwjgl.input.Mouse.isButtonDown(0))) {
+            vScroll -= eventDWheel * 0.05;
         }
+
+        super.handleMouseInput();
     }
 
     @Override
@@ -239,6 +252,8 @@ public class GuiMacro extends CyvGui {
                             l.sprint = !l.sprint;
                         } else if (keyCode == mc.gameSettings.keyBindSneak.getKeyCode()) {
                             l.sneak = !l.sneak;
+                        } else if (keyCode == mc.gameSettings.keyBindUseItem.getKeyCode()) {
+                            l.rmb = !l.rmb;
                         }
                     }
                 } else {
@@ -274,6 +289,7 @@ public class GuiMacro extends CyvGui {
                 newLine.jump = oldLine.jump;
                 newLine.sprint = oldLine.sprint;
                 newLine.sneak = oldLine.sneak;
+                newLine.rmb = oldLine.rmb;
 
                 newLine.yawField.setText(oldLine.yawField.getText());
                 newLine.pitchField.setText(oldLine.pitchField.getText());
@@ -335,6 +351,8 @@ public class GuiMacro extends CyvGui {
                     l.sprint = !l.sprint;
                 } else if (keyCode == mc.gameSettings.keyBindSneak.getKeyCode()) {
                     l.sneak = !l.sneak;
+                } else if (keyCode == mc.gameSettings.keyBindUseItem.getKeyCode()) {
+                    l.rmb = !l.rmb;
                 }
             }
 
@@ -382,6 +400,7 @@ public class GuiMacro extends CyvGui {
                 macroString.add(line.jump ? "true" : "false");
                 macroString.add(line.sprint ? "true" : "false");
                 macroString.add(line.sneak ? "true" : "false");
+                macroString.add(line.rmb ? "true" : "false");
 
                 try {
                     macroString.add(Double.parseDouble(line.yawField.getText()) + "");
@@ -415,7 +434,7 @@ public class GuiMacro extends CyvGui {
         int width = sizeX/2 + 20;
         int height = mc.fontRenderer.FONT_HEIGHT*2;
 
-        public boolean w, a, s, d, jump, sprint, sneak;
+        public boolean w, a, s, d, jump, sprint, sneak, rmb;
 
         GuiTextField yawField, pitchField;
 
@@ -443,6 +462,7 @@ public class GuiMacro extends CyvGui {
             if (jump) string.append("Jump ");
             if (sprint) string.append("Spr ");
             if (sneak) string.append("Snk ");
+            if (rmb) string.append("RMB ");
 
             GuiUtils.drawString(string.toString(), xStart + 4, yHeight + height/3, 0xFFFFFFFF);
 

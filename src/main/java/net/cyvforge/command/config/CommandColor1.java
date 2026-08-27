@@ -4,6 +4,7 @@ import net.cyvforge.CyvForge;
 import net.cyvforge.config.CyvClientColorHelper;
 import net.cyvforge.util.defaults.CyvCommand;
 import net.minecraft.command.ICommandSender;
+import java.util.List;
 
 public class CommandColor1 extends CyvCommand {
     public CommandColor1() {
@@ -25,5 +26,10 @@ public class CommandColor1 extends CyvCommand {
         } else {
             CyvForge.sendChatMessage("Invalid color. For a list of colors use /cyv colors");
         }
+    }
+
+    @Override
+    public List<String> getTabCompletions(String[] args) {
+        return java.util.Arrays.asList(net.cyvforge.config.CyvClientColorHelper.colorStrings);
     }
 }

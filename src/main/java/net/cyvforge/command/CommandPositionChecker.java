@@ -3,7 +3,9 @@ package net.cyvforge.command;
 import net.cyvforge.CyvForge;
 import net.cyvforge.config.CyvClientConfig;
 import net.cyvforge.util.defaults.CyvCommand;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
+import java.util.List;
 
 import java.util.ArrayList;
 
@@ -13,10 +15,11 @@ public class CommandPositionChecker extends CyvCommand {
         this.hasArgs = true;
         this.usage = "[subcategory]";
         this.helpString = "Configure position checker. Use /cyv help pos for more info.";
+
         this.aliases = new ArrayList<String>();
-        aliases.add("pos");
-        aliases.add("poscheck");
-        aliases.add("poschecker");
+        this.aliases.add("pos");
+        this.aliases.add("poscheck");
+        this.aliases.add("poschecker");
     }
 
 
@@ -41,6 +44,8 @@ public class CommandPositionChecker extends CyvCommand {
                 CyvForge.sendChatMessage("Position checker toggled on.");
             }
 
+        } else if (subcategory.equals("mark") || subcategory.equals("here") || subcategory.equals("set")) {
+            setMark();
         } else if (subcategory.equals("minx") || subcategory.equals("xmin")) {
             try {
                 CyvClientConfig.set("positionCheckerMinX", Double.parseDouble(args[1]));
@@ -97,6 +102,30 @@ public class CommandPositionChecker extends CyvCommand {
         } else {
             CyvForge.sendChatMessage("Unrecognized argument.");
         }
+    }
+
+    public static void setMark() {
+        double radius = CyvClientConfig.getDouble("positionCheckerRadius", 0.1);
+        double px = Minecraft.getMinecraft().player.posX;
+        double pz = Minecraft.getMinecraft().player.posZ;
+
+        double minX = Math.round((px - radius) * 100000.0) / 100000.0;
+        double maxX = Math.round((px + radius) * 100000.0) / 100000.0;
+        double minZ = Math.round((pz - radius) * 100000.0) / 100000.0;
+        double maxZ = Math.round((pz + radius) * 100000.0) / 100000.0;
+
+        CyvClientConfig.set("positionCheckerMinX", minX);
+        CyvClientConfig.set("positionCheckerMaxX", maxX);
+        CyvClientConfig.set("positionCheckerMinZ", minZ);
+        CyvClientConfig.set("positionCheckerMaxZ", maxZ);
+
+        net.cyvforge.event.ConfigLoader.save(CyvForge.config, false);
+        CyvForge.sendChatMessage("Position checker bounds set to current position (+/- " + radius + ").");
+    }
+
+    @Override
+    public List<String> getTabCompletions(String[] args) {
+        return java.util.Arrays.asList("toggle", "minx", "maxx", "minz", "maxz", "tick", "zneo");
     }
 
     @Override

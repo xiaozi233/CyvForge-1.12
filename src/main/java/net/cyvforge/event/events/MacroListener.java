@@ -35,8 +35,8 @@ public class MacroListener {
                 if (renderTickTime - lastPartial < 0.1) return;
                 int index = CommandMacro.macro.size() - CommandMacro.macroRunning;
                 ArrayList<String> macro = CommandMacro.macro.get(index+1);
-                double yawChange = Double.parseDouble(macro.get(7)) * (renderTickTime - lastPartial);
-                double pitchChange = Double.parseDouble(macro.get(8)) * (renderTickTime - lastPartial);
+                double yawChange = Double.parseDouble(macro.get(8)) * (renderTickTime - lastPartial);
+                double pitchChange = Double.parseDouble(macro.get(9)) * (renderTickTime - lastPartial);
 
                 double smallestAngle = (float) (1.2 * Math.pow((0.6 * options.mouseSensitivity + 0.2), 3));
                 yawChange = smallestAngle * Math.round(yawChange/smallestAngle);
@@ -89,7 +89,7 @@ public class MacroListener {
                 ArrayList<String> macro = CommandMacro.macro.get(index + 1);
 
                 //index starts at 1 and works its way to the length of the macro
-                //macro.get(index)[x], x = 0: w, 1: a, 2: s, 3: d, 4: jump, 5: sprint, 6: sneak, 7/8: yaw/pitch
+                //macro.get(index)[x], x = 0: w, 1: a, 2: s, 3: d, 4: jump, 5: sprint, 6: sneak, 7: RMB, 8/9: yaw/pitch
 
                 KeyBinding.setKeyBindState(options.keyBindForward.getKeyCode(), Boolean.parseBoolean(macro.get(0)));
                 KeyBinding.setKeyBindState(options.keyBindLeft.getKeyCode(), Boolean.parseBoolean(macro.get(1)));
@@ -98,9 +98,10 @@ public class MacroListener {
                 KeyBinding.setKeyBindState(options.keyBindJump.getKeyCode(), Boolean.parseBoolean(macro.get(4)));
                 KeyBinding.setKeyBindState(options.keyBindSprint.getKeyCode(), Boolean.parseBoolean(macro.get(5)));
                 KeyBinding.setKeyBindState(options.keyBindSneak.getKeyCode(), Boolean.parseBoolean(macro.get(6)));
+                KeyBinding.setKeyBindState(options.keyBindUseItem.getKeyCode(), Boolean.parseBoolean(macro.get(7)));
 
-                float yawChange = Float.parseFloat(macro.get(7));
-                float pitchChange = Float.parseFloat(macro.get(8));
+                float yawChange = Float.parseFloat(macro.get(8));
+                float pitchChange = Float.parseFloat(macro.get(9));
 
                 //undo partialtick turns
                 for (int i = partialYawChange.size() - 1; i >= 0; i--) {

@@ -1,6 +1,7 @@
 package net.cyvforge.hud;
 
 import net.cyvforge.command.mpk.CommandMacro;
+import net.cyvforge.config.CyvClientConfig;
 import net.cyvforge.gui.GuiMPK;
 import net.cyvforge.gui.GuiModConfig;
 import net.cyvforge.hud.labels.*;
@@ -32,7 +33,7 @@ public class HUDManager {
         registeredRenderers.add(new DirectionHUD());
         registeredRenderers.add(new TogglesprintHUD());
         registeredRenderers.add(new KeystrokesHUD());
-        registeredRenderers.add(new TurnHUD());
+        registeredRenderers.addAll(new TurnHUD().labels);
 
         registeredRenderers.addAll(new LabelBundleCoordinates().labels);
         registeredRenderers.addAll(new LabelBundleHitCoords().labels);
@@ -62,9 +63,21 @@ public class HUDManager {
 
         if (CommandMacro.macroRunning > 0) { //macrorunning
             ScaledResolution sr = new ScaledResolution(mc);
+
+            String mode = CyvClientConfig.getString("macroHUDColor", "Default");
+            int macroColor;
+
+            if (mode.equals("Color1")) {
+                macroColor = (int) net.cyvforge.config.CyvClientColorHelper.color1.getDrawColor();
+            } else if (mode.equals("Color2")) {
+                macroColor = (int) net.cyvforge.config.CyvClientColorHelper.color2.getDrawColor();
+            } else {
+                macroColor = 0xFFFF0000;
+            }
+
             GuiUtils.drawString("MACRO",
                     sr.getScaledWidth()/2 - mc.fontRenderer.getStringWidth("MACRO") / 2,
-                    sr.getScaledHeight()/5, 0xFFFF0000, false);
+                    sr.getScaledHeight()/5, macroColor, false);
         }
 
         if (mc.currentScreen == null || mc.currentScreen instanceof GuiContainer ||

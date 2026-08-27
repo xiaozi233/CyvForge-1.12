@@ -4,6 +4,7 @@ import net.cyvforge.CyvForge;
 import net.cyvforge.config.CyvClientConfig;
 import net.cyvforge.util.defaults.CyvCommand;
 import net.minecraft.command.ICommandSender;
+import java.util.List;
 
 public class CommandInertia extends CyvCommand {
     public CommandInertia() {
@@ -90,6 +91,17 @@ public class CommandInertia extends CyvCommand {
             CyvForge.sendChatMessage("Unrecognized argument.");
         }
     }
+
+    @Override
+    public List<String> getTabCompletions(String[] args) {
+        if (args.length == 2) return java.util.Arrays.asList("toggle", "tick", "min", "max", "mode", "ground");
+        if (args.length == 3) {
+            if (args[1].equalsIgnoreCase("mode")) return java.util.Arrays.asList("x", "z");
+            if (args[1].equalsIgnoreCase("ground")) return java.util.Arrays.asList("normal", "ice", "slime");
+        }
+        return new java.util.ArrayList<>();
+    }
+
 
     @Override
     public String getDetailedHelp() {

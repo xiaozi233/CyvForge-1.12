@@ -8,7 +8,6 @@ import net.minecraft.command.ICommandSender;
 public class CommandSimulate extends CyvCommand {
     public CommandSimulate() {
         super("simulate");
-        this.usage = "none";
         this.helpString = "Simulates movement given a string of functions.";
 
         this.aliases.add("sim");

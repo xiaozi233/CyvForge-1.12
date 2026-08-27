@@ -17,7 +17,7 @@ public class LabelBundleTurningAngles extends LabelBundle {
         this.labels.add(new DraggableHUDElement() {
             public String getName() {return "labelJumpAngle";}
             public String getDisplayName() {return "Jump Angle";}
-            public int getWidth() {return getLabelWidth(getDisplayName(), true);}
+            public int getWidth() {return getLabelWidth(getDisplayName(), true) + 11;}
             public int getHeight() {return getLabelHeight();}
             public ScreenPosition getDefaultPosition() {return new ScreenPosition(0, 103);}
             public void render(ScreenPosition pos) {
@@ -61,7 +61,7 @@ public class LabelBundleTurningAngles extends LabelBundle {
                 String st = df.format(ParkourTickListener.formatYaw(ParkourTickListener.turningAngles[1]));
 
                 drawString("Second Turn: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(st, pos.getAbsoluteX() + 1 + font.getStringWidth("Second Turn: "),
+                drawString(st+"\u00B0", pos.getAbsoluteX() + 1 + font.getStringWidth("Second Turn: "),
                         pos.getAbsoluteY() + 1, color2);
             }
             public void renderDummy(ScreenPosition pos) {
@@ -73,7 +73,7 @@ public class LabelBundleTurningAngles extends LabelBundle {
                 for (int i=0; i<CyvClientConfig.getInt("df",5); i++) str.append("0");
 
                 drawString("Second Turn: ", pos.getAbsoluteX() + 1, pos.getAbsoluteY() + 1, color1);
-                drawString(str.toString(), pos.getAbsoluteX() + 1 + font.getStringWidth("Second Turn: "),
+                drawString(str.toString()+"\u00B0", pos.getAbsoluteX() + 1 + font.getStringWidth("Second Turn: "),
                         pos.getAbsoluteY() + 1, color2);
             }
         });

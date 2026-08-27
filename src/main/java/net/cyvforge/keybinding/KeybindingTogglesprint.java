@@ -54,7 +54,7 @@ public class KeybindingTogglesprint extends CyvKeybinding {
                     KeyBinding.setKeyBindState(settings.keyBindSprint.getKeyCode(), false);
                     break;
                 case DISABLED:
-                    currentMode = CyvClientConfig.getBoolean("invfmm", true) ? SprintMode.FMM : SprintMode.JAM;
+                    currentMode = CyvClientConfig.getBoolean("invFmm", true) ? SprintMode.FMM : SprintMode.JAM;
                     break;
             }
         }

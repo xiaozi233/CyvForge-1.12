@@ -10,9 +10,10 @@ import net.minecraft.command.ICommandSender;
 public class CommandMm extends CyvCommand {
     public CommandMm() {
         super("mm");
-        aliases.add("momentumblock");
-        aliases.add("momentum");
         this.helpString = "Open GUi for modifying momentum block settings.";
+
+        this.aliases.add("momentumblock");
+        this.aliases.add("momentum");
     }
 
     @Override

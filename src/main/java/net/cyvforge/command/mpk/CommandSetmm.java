@@ -18,8 +18,8 @@ import java.util.List;
 public class CommandSetmm extends CyvCommand {
     public CommandSetmm() {
         super("setmm");
-        hasArgs = true;
-        usage = "[arguments]";
+        this.hasArgs = true;
+        this.usage = "[arguments]";
         this.helpString = "Set momentum block";
     }
 
@@ -43,10 +43,14 @@ public class CommandSetmm extends CyvCommand {
                 else if (s.equals("z")) axis = LandingAxis.z;
                 else if (s.equals("land") || s.equals("landing")) mode = LandingMode.landing;
                 else if (s.equals("hit")) mode = LandingMode.hit;
-                else if (s.equals("zneo") || s.equals("z-neo") || s.equals("neo") || s.equals("z_neo")) mode = LandingMode.z_neo;
+                else if (s.equals("xneo") || s.equals("x-neo") || s.equals("neo-x") || s.equals("x_neo") || s.equals("neox")) mode = LandingMode.x_neo;
+                else if (s.equals("zneo") || s.equals("z-neo") || s.equals("neo-z") || s.equals("neo") || s.equals("z_neo") || s.equals("neoz")) mode = LandingMode.z_neo;
                 else if (s.equals("enter")) mode = LandingMode.enter;
                 else if (s.equals("box")) box = true;
                 else if (s.equals("target")) target = true;
+                //shortcuts
+                else if (s.equals("slime") || s.equals("ice") || s.equals("slime/ice")) { box = true; mode = LandingMode.hit; }
+                else if (s.equals("ladder") || s.equals("vine") || s.equals("ladder/vine") ) { box = true; mode = LandingMode.enter; }
             }
 
             if (target) {
@@ -56,11 +60,16 @@ public class CommandSetmm extends CyvCommand {
                         BlockPos pos = hit.getBlockPos();
                         List<AxisAlignedBB> list = CyvForge.getHitbox(pos, mc.world);
 
-                        if (list != null && list.isEmpty()) {
+                        net.minecraft.block.Block block = mc.world.getBlockState(pos).getBlock();
+
+                        boolean isLiquid = block instanceof net.minecraft.block.BlockLiquid;
+                        boolean isPassable = block instanceof net.minecraft.block.BlockLadder || block instanceof net.minecraft.block.BlockVine;
+
+                        if (list != null && list.isEmpty() && !isLiquid && !isPassable) {
                             CyvForge.sendChatMessage("Please look at a valid block.");
                         } else {
                             ParkourTickListener.momentumBlock = new LandingBlock(pos, mode, axis, box);
-                            CyvForge.sendChatMessage("Successfully set landing block.");
+                            CyvForge.sendChatMessage("Successfully set momentum block.");
                         }
                     } catch (Exception e) {
                         CyvForge.sendChatMessage("Please look at a valid block.");
@@ -74,23 +83,31 @@ public class CommandSetmm extends CyvCommand {
                     BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);
                     List<AxisAlignedBB> list = CyvForge.getHitbox(pos, mc.world);
 
-                    if (list != null && list.isEmpty()) {
+                        net.minecraft.block.Block block = mc.world.getBlockState(pos).getBlock();
+                        boolean isPassable = block instanceof net.minecraft.block.BlockLadder || block instanceof net.minecraft.block.BlockVine;
+
+                    if (list != null && list.isEmpty() && !isPassable) {
                         pos = pos.down();
                         list = CyvForge.getHitbox(pos, mc.world);
                     }
 
-                    if (list != null && list.isEmpty()) {
+                    if (list != null && list.isEmpty() && !isPassable) {
                         CyvForge.sendChatMessage("Please stand on a valid block.");
                     } else {
                         ParkourTickListener.momentumBlock = new LandingBlock(pos, mode, axis, box);
-                        CyvForge.sendChatMessage("Successfully set landing block.");
+                        CyvForge.sendChatMessage("Successfully set momentum block.");
                     }
 
                 } else {
                     CyvForge.sendChatMessage("Please stand on a valid block.");
                 }
             }
-        }, "Set landing block").start();
+        }, "Set momentum block").start();
 
+    }
+
+    @Override
+    public List<String> getTabCompletions(String[] args) {
+        return java.util.Arrays.asList("target", "box", "hit", "enter", "x", "z", "zneo", "xneo", "tick", "ladder/vine", "slime/ice");
     }
 }

@@ -13,7 +13,7 @@ public class KeybindingHUDPositions extends CyvKeybinding {
     @Override
     public void onTickEnd(boolean isPressed) {
         if (isPressed) {
-            GuiHandler.setScreen(new GuiHUDPositions(false));
+            GuiHandler.setScreen(new GuiHUDPositions(false, false));
         }
     }
 }

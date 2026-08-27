@@ -59,7 +59,7 @@ public class CommandGetCoords extends CyvCommand {
         String xs = df.format(ParkourTickListener.x);
         String ys = df.format(ParkourTickListener.y);
         String zs = df.format(ParkourTickListener.z);
-        String yaws = df.format(ParkourTickListener.f);
+        String yaws = df.format(ParkourTickListener.formatYaw(ParkourTickListener.f));
         String pitchs = df.format(ParkourTickListener.p);
         String toCopy = xs + " " + ys + " " + zs + " " + yaws + " " + pitchs;
         GuiScreen.setClipboardString(toCopy);

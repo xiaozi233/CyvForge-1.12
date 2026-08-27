@@ -23,8 +23,8 @@ public class CyvClientColorHelper {
         colors.add(new CyvClientColor("dark_aqua", ChatFormatting.DARK_AQUA));
         colors.add(new CyvClientColor("dark_blue", ChatFormatting.DARK_BLUE));
         colors.add(new CyvClientColor("blue", ChatFormatting.BLUE));
-        colors.add(new CyvClientColor("light_purple", ChatFormatting.LIGHT_PURPLE));
-        colors.add(new CyvClientColor("dark_purple", ChatFormatting.DARK_PURPLE));
+        colors.add(new CyvClientColor("pink", ChatFormatting.LIGHT_PURPLE));
+        colors.add(new CyvClientColor("purple", ChatFormatting.DARK_PURPLE));
         colors.add(new CyvClientColor("white", ChatFormatting.WHITE));
         colors.add(new CyvClientColor("gray", ChatFormatting.GRAY));
         colors.add(new CyvClientColor("dark_gray", ChatFormatting.DARK_GRAY));
@@ -32,6 +32,25 @@ public class CyvClientColorHelper {
 
         colorStrings = colors.stream().map(c -> c.name).toArray(String[]::new);
 
+        //aliases
+        colors.add(new CyvClientColor("dred", ChatFormatting.DARK_RED));
+        colors.add(new CyvClientColor("dgreen", ChatFormatting.DARK_GREEN));
+        colors.add(new CyvClientColor("daqua", ChatFormatting.DARK_AQUA));
+        colors.add(new CyvClientColor("dblue", ChatFormatting.DARK_BLUE));
+        colors.add(new CyvClientColor("light_purple", ChatFormatting.LIGHT_PURPLE));
+        colors.add(new CyvClientColor("lpurple", ChatFormatting.LIGHT_PURPLE));
+        colors.add(new CyvClientColor("dark_purple", ChatFormatting.DARK_PURPLE));
+        colors.add(new CyvClientColor("dpurple", ChatFormatting.DARK_PURPLE));
+        colors.add(new CyvClientColor("dgray", ChatFormatting.DARK_GRAY));
+    }
+
+    private static String getOfficialName(CyvClientColor c) {
+        for (int i = 0; i < 16; i++) {
+            if (colors.get(i).formatting == c.formatting) {
+                return colors.get(i).name;
+            }
+        }
+        return c.name;
     }
 
     public static void checkColor(String c1, String c2) {
@@ -39,19 +58,19 @@ public class CyvClientColorHelper {
         color2 = colors.get(12);
 
         for (CyvClientColor c : colors) {
-            if (c.name.equals(c1)) color1 = c;
-            if (c.name.equals(c2)) color2 = c;
+            if (c.name.equalsIgnoreCase(c1)) color1 = c;
+            if (c.name.equalsIgnoreCase(c2)) color2 = c;
         }
 
-        CyvClientConfig.set("color1", color1.name);
-        CyvClientConfig.set("color2", color2.name);
+        CyvClientConfig.set("color1", getOfficialName(color1));
+        CyvClientConfig.set("color2", getOfficialName(color2));
     }
 
     public static boolean setColor1(String s) {
         for (CyvClientColor c : colors) {
-            if (c.name.equals(s)) {
+            if (c.name.equalsIgnoreCase(s)) {
                 color1 = c;
-                CyvClientConfig.set("color1", color1.name);
+                CyvClientConfig.set("color1", getOfficialName(c));
                 return true;
             }
         }
@@ -60,9 +79,9 @@ public class CyvClientColorHelper {
 
     public static boolean setColor2(String s) {
         for (CyvClientColor c : colors) {
-            if (c.name.equals(s)) {
+            if (c.name.equalsIgnoreCase(s)) {
                 color2 = c;
-                CyvClientConfig.set("color2", color2.name);
+                CyvClientConfig.set("color2", getOfficialName(c));
                 return true;
             }
         }

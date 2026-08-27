@@ -2,8 +2,8 @@ package net.cyvforge.gui.config.panels;
 
 import net.cyvforge.CyvForge;
 import net.cyvforge.config.CyvClientConfig;
-import net.cyvforge.gui.GuiModConfig;
 import net.cyvforge.gui.config.ConfigPanel;
+import net.cyvforge.util.defaults.CyvGui;
 import net.cyvforge.util.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -16,24 +16,24 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
     public String displayString;
     public final int index;
     public final T[] sliderValues;
-    public GuiModConfig screenIn;
+    public CyvGui screenIn;
 
-    private final int xPosition;
-    private final int yPosition;
-    private final int sizeX;
-    private final int sizeY;
+    private int xPosition;
+    private int yPosition;
+    private int sizeX;
+    private int sizeY;
 
-    public ConfigPanelOptionSwitcher(ArrayList<ConfigPanel> array, String configOption, String displayString, T[] options, GuiModConfig screenIn) {
+    public ConfigPanelOptionSwitcher(ArrayList<ConfigPanel> array, String configOption, String displayString, T[] options, CyvGui screenIn) {
         this.index = array.size();
         this.displayString = displayString;
         this.configOption = configOption;
         this.screenIn = screenIn;
 
         ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-        sizeX = screenIn.sizeX-20;
+        sizeX = screenIn.getSizeX()-20;
         sizeY = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT*3/2;
-        this.xPosition = sr.getScaledWidth()/2-screenIn.sizeX/2+10;
-        this.yPosition = sr.getScaledHeight()/2-screenIn.sizeY/2+10 + (index * Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT * 2);
+        this.xPosition = sr.getScaledWidth()/2-screenIn.getSizeX()/2+10;
+        this.yPosition = sr.getScaledHeight()/2-screenIn.getSizeY()/2+10 + (index * Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT * 2);
 
         this.sliderValues = options;
         this.sliderValue = 0;
@@ -48,15 +48,36 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
 
     @Override
     public void draw(int mouseX, int mouseY, int scroll) {
+        boolean active = isEnabled();
+        int textColor = active ? 0xFFFFFFFF : 0xFF777777;
+        int bgColor;
+
+        if (!active) {
+            bgColor = 0x80555555;
+        } else {
+            bgColor = this.mouseInBounds(mouseX, mouseY + scroll) ? CyvForge.theme.accent1 : CyvForge.theme.accent2;
+        }
+
         //text label
-        GuiUtils.drawString(this.displayString, this.xPosition, this.yPosition+this.sizeY/2-Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT/2+1-scroll, 0xFFFFFFFF, true);
+        GuiUtils.drawString(this.displayString, this.xPosition, this.yPosition+this.sizeY/2-Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT/2+1-scroll, textColor, active);
 
         //bg
-        GuiUtils.drawRoundedRect(this.xPosition+this.sizeX/2, this.yPosition-scroll, this.xPosition+this.sizeX, this.yPosition+this.sizeY-scroll, 3, this.mouseInBounds(mouseX, mouseY) ? CyvForge.theme.accent1 : CyvForge.theme.accent2);
+        GuiUtils.drawRoundedRect(this.xPosition+this.sizeX/2, this.yPosition-scroll, this.xPosition+this.sizeX, this.yPosition+this.sizeY-scroll, 3, bgColor);
 
         //amount
-        GuiUtils.drawCenteredString(""+this.sliderValues[this.sliderValue], this.xPosition+this.sizeX*3/4, this.yPosition+this.sizeY/2-Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT/2+1-scroll, 0xFFFFFFFF, true);
+        GuiUtils.drawCenteredString(""+this.sliderValues[this.sliderValue], this.xPosition+this.sizeX*3/4, this.yPosition+this.sizeY/2-Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT/2+1-scroll, textColor, active);
 
+    }
+
+    @Override
+    public void setPos(int x, int y, int width) {
+        this.xPosition = x;
+        this.yPosition = y;
+        this.sizeX = width;
+    }
+
+    @Override public int getIndex() {
+        return this.index;
     }
 
     @Override
@@ -66,12 +87,14 @@ public class ConfigPanelOptionSwitcher<T> implements ConfigPanel {
 
     @Override
     public boolean mouseInBounds(int mouseX, int mouseY) {
-        return mouseX > this.xPosition + this.sizeX / 2 && mouseY > this.yPosition
-                && mouseX < this.xPosition + this.sizeX && mouseY < this.yPosition + this.sizeY;
+        return isEnabled() && mouseX > this.xPosition+this.sizeX/2 && mouseY > this.yPosition
+                && mouseX < this.xPosition+this.sizeX && mouseY < this.yPosition+this.sizeY;
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+        if (!isEnabled()) return;
+
         if (mouseButton == 0) this.sliderValue++;
         else if (mouseButton == 1) this.sliderValue--;
         if (this.sliderValue >= this.sliderValues.length) this.sliderValue = 0;

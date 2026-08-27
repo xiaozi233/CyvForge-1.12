@@ -12,6 +12,8 @@ import java.io.IOException;
 public class CyvGui extends GuiScreen {
     protected ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
     public String name;
+    public int getSizeX() { return 0; }
+    public int getSizeY() { return 0; }
 
     public CyvGui(String name) {
         super();

@@ -8,11 +8,16 @@ import net.cyvforge.discord.DiscordRPCEventManager;
 import net.cyvforge.discord.DiscordRPCHandler;
 import net.cyvforge.event.CommandInitializer;
 import net.cyvforge.event.ConfigLoader;
+import net.cyvforge.event.events.ChatSuggestionsHandler;
 import net.cyvforge.event.events.GuiHandler;
 import net.cyvforge.event.events.KeyInputHandler;
 import net.cyvforge.event.events.MacroListener;
+import net.cyvforge.event.events.MacroRecorder;
 import net.cyvforge.event.events.ParkourTickListener;
+import net.cyvforge.event.events.SignCommandListener;
 import net.cyvforge.hud.HUDManager;
+import net.cyvforge.keybinding.ChatMacro.ChatMacroListener;
+import net.cyvforge.keybinding.ChatMacro.ChatMacroManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -58,11 +63,23 @@ public class CyvForge {
 
 		MinecraftForge.EVENT_BUS.register(new KeyInputHandler());
 		MinecraftForge.EVENT_BUS.register(new GuiHandler());
+		MinecraftForge.EVENT_BUS.register(new ChatSuggestionsHandler());
+		MinecraftForge.EVENT_BUS.register(new MacroRecorder());
+
+		ChatMacroManager.load();
 		CommandInitializer.register(); //register mod commands
 
-		MinecraftForge.EVENT_BUS.register(new ParkourTickListener());
 		MinecraftForge.EVENT_BUS.register(new MacroListener());
+		MinecraftForge.EVENT_BUS.register(new ParkourTickListener());
+		MinecraftForge.EVENT_BUS.register(new SignCommandListener());
+		MinecraftForge.EVENT_BUS.register(new ChatMacroListener());
 		MinecraftForge.EVENT_BUS.register(new DiscordRPCEventManager());
+
+		if (CyvClientConfig.getBoolean("fullbright", true)) {
+			Minecraft.getMinecraft().gameSettings.gammaSetting = 1000f;
+		} else {
+			Minecraft.getMinecraft().gameSettings.gammaSetting = 1.0f;
+		}
 
 		LogManager.getLogger().info("CyvForge mod initialized!");
 
@@ -76,10 +93,12 @@ public class CyvForge {
 	/**Send a client-sided message to the player*/
 	public static void sendChatMessage(Object text) {
 		try {
+			String prefix = CyvClientConfig.getString("chatPrefix", "Cyv");
+
 			String chatColor2 = CyvClientConfig.getBoolean("whiteChat", false) ?
 					CyvClientColorHelper.colors.get(12).getChatFormatting() : CyvClientColorHelper.color2.getChatFormatting();
 			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString(
-					CyvClientColorHelper.color1.getChatFormatting() + "<Cyv> " + chatColor2 + text.toString()));
+					CyvClientColorHelper.color1.getChatFormatting() + "<" + prefix + "> " + chatColor2 + text.toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
